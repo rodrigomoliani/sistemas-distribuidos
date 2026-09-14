@@ -16,7 +16,8 @@ def preparar(limpar=False):
                 canal.queue_purge(queue=fila)
         print("Topologia pronta: duas exchanges e seis filas." + (" Filas limpas." if limpar else ""))
     finally:
-        conexao.close()
+        if conexao.is_open:
+            conexao.close()
 
 
 if __name__ == "__main__":
