@@ -2,6 +2,8 @@
 
 Backend acadêmico para a disciplina de Sistemas Distribuídos da UTFPR. Cinco microsserviços independentes e dois consumidores de promoções comunicam-se exclusivamente pelo RabbitMQ. A interface é um menu de terminal.
 
+**Toda comunicação entre processos da aplicação usa eventos AMQP pelo RabbitMQ.** Não há API REST, servidor HTTP, requisições GET/POST ou chamadas diretas entre microsserviços. A visualização de produtos e a consulta de pedidos no menu usam dados locais do Principal. Os métodos `.get()` no código apenas consultam dicionários Python ou variáveis de ambiente.
+
 ## Preparação
 
 Requisitos: Python 3.12 e Docker Desktop executando contêineres Linux. No Windows, o Docker pode exigir WSL 2 e uma reinicialização. Execute os comandos abaixo **dentro de `trabalho_2`**, usando PowerShell.
@@ -62,7 +64,7 @@ Execute cada linha em um terminal diferente, dentro de `trabalho_2`:
 .\.venv\Scripts\python.exe -u -m principal
 ```
 
-Variáveis opcionais: `PROB_APROVACAO` (0 a 1), `INTERVALO_PROMOCOES` (segundos positivos) e `RABBITMQ_URL`. A conexão padrão usa o usuário de demonstração `guest` em `localhost:5672`; as portas do Compose ficam vinculadas somente a `127.0.0.1`. O painel fica em [localhost:15672](http://localhost:15672), com usuário e senha `guest`.
+Variáveis opcionais: `PROB_APROVACAO` (0 a 1), `INTERVALO_PROMOCOES` (segundos positivos) e `RABBITMQ_URL`. A conexão padrão usa o usuário de demonstração `guest` em `localhost:5672`; o Compose publica somente a porta AMQP 5672, vinculada a `127.0.0.1`. A imagem não habilita painel nem API HTTP de administração.
 
 Para encerrar: saia do Principal com `0`, interrompa os outros seis processos com Ctrl+C e execute `docker compose down`. Esse comando encerra e remove apenas a infraestrutura deste Compose.
 
@@ -97,6 +99,8 @@ flowchart TD
 A exchange `eCommerce` é `direct`: cada fila possui os bindings exatos da tabela. A exchange `Promoções` é `topic`: `promocoes.c1` usa `promocao.categoria.A` e `promocao.categoria.B`; `promocoes.c2` usa `promocao.categoria.*`. As outras filas chamam-se `principal`, `estoque`, `pagamento` e `entrega`.
 
 São seis filas próprias, nomeadas, não exclusivas, não duráveis e sem exclusão automática quando um consumidor sai. As mensagens são transitórias. Não é usada exchange `fanout`. Cada publicação chega a todas as filas cujo binding corresponde à routing key.
+
+O arquivo `rabbitmq.conf`, montado pelo Compose, permite explicitamente filas transitórias não exclusivas no RabbitMQ 4.3.5. Essa configuração é necessária para a topologia escolhida e deve acompanhar a execução do broker, inclusive fora do Docker.
 
 O Principal usa uma thread para receber eventos e outra para o menu, cada uma com sua própria conexão Pika. Um lock protege os pedidos. Os outros serviços consomem sequencialmente. Nenhum serviço consulta outro processo ou compartilha estado mutável. O módulo comum contém apenas catálogo inicial, mensageria e criptografia.
 
@@ -150,14 +154,15 @@ docker compose up -d --wait
 .\.venv\Scripts\python.exe -m scripts.teste_integracao
 ```
 
-O teste verifica aprovação até envio, consumo enquanto o menu espera entrada, exclusão manual, indisponibilidade, recusa com devolução, assinatura inválida, publicação repetida e roteamento A/B/C entre C1 e C2. Para um broker fora do Compose, configure `RABBITMQ_URL` apontando para uma instância dedicada à demonstração.
+O teste verifica os sete processos em execução simultânea, aprovação até envio, consumo enquanto o menu espera entrada, exclusão manual, indisponibilidade, recusa com devolução, assinatura inválida, conteúdo malformado, publicação repetida e roteamento A/B/C entre C1 e C2. Para um broker fora do Compose, configure `RABBITMQ_URL` apontando para uma instância dedicada à demonstração.
 
-### Validação da primeira entrega — 09/09/2026
+### Validação da revisão — 14/09/2026
 
-- 16 testes de regras e criptografia passaram em Python 3.12.10.
-- Geração das chaves, compilação dos módulos, sintaxe dos scripts PowerShell e configuração do Compose foram verificadas.
-- O teste de integração foi tentado, mas não executou cenários: o Docker Desktop instalado não iniciou o motor porque a Plataforma de Máquina Virtual do Windows está desativada e o WSL não está disponível. Não havia broker na porta 5672.
-- **Pendente:** habilitar a Plataforma de Máquina Virtual e preparar WSL 2 com privilégios de administrador, reiniciar o Windows se solicitado e executar o teste de integração acima. A integração completa ainda não está validada nesta entrega.
+- 18 testes de regras e criptografia passaram em Python 3.12.10.
+- Os cinco cenários de integração passaram com RabbitMQ **real**, versão 4.3.5, usando Erlang/OTP 27.3.4.17 no Windows. Foi usado um broker nativo temporário, com a configuração de filas do projeto, AMQP em `127.0.0.1:5672` e nenhum plugin HTTP habilitado.
+- A revisão corrigiu identificadores malformados que podiam interromper o Principal ou o Estoque. Agora esses eventos são descartados e os consumidores continuam processando mensagens válidas.
+- A configuração do Compose e a sintaxe dos scripts PowerShell foram verificadas. O Compose utiliza a imagem sem management e publica somente a porta AMQP.
+- **Limitação do ambiente local:** o Docker Desktop desta máquina ainda depende da preparação de WSL 2 e da Plataforma de Máquina Virtual do Windows. Portanto, os testes validaram a aplicação com broker nativo; a inicialização pelo Docker não foi executada nesta máquina. Em um ambiente com Docker funcional, use os comandos documentados acima.
 
 Na defesa, demonstre:
 

@@ -14,7 +14,7 @@ def montar_itens(selecao):
     """Agrupa produtos repetidos e aplica os preços do catálogo local."""
     quantidades = {}
     for produto_id, quantidade in selecao:
-        if produto_id not in CATALOGO:
+        if not isinstance(produto_id, str) or produto_id not in CATALOGO:
             raise ValueError(f"Produto desconhecido: {produto_id}")
         if type(quantidade) is not int or quantidade <= 0:
             raise ValueError("A quantidade deve ser um inteiro positivo.")

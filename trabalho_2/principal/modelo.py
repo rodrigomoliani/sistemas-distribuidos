@@ -32,6 +32,8 @@ class Principal:
 
     def tratar(self, tipo, dados):
         pedido_id = dados.get("pedido_id")
+        if not isinstance(pedido_id, str) or not pedido_id:
+            raise ValueError("pedido_id ausente ou inválido.")
         with self.lock:
             pedido = self.pedidos.get(pedido_id)
             if pedido is None or pedido["status"] == "excluido":

@@ -118,6 +118,11 @@ class IntegracaoTest(unittest.TestCase):
 
     def test_aprovacao_menu_ativo_exclusao_e_falta_de_estoque(self):
         principal, estoque = self.fluxo(1)
+        self.iniciar("consumidores", "c1")
+        c2 = self.iniciar("consumidores", "c2")
+        self.iniciar("promocoes", INTERVALO_PROMOCOES="0.1")
+        c2.esperar("PROMOCAO c2")
+        # Os sete processos coexistem: promoções continuam durante o fluxo de pedidos.
         pedido_id = self.criar(principal, "1:2")
         # Nenhuma entrada adicional: o consumidor atualiza enquanto o menu espera input().
         principal.esperar(f"STATUS {pedido_id} enviado")
@@ -145,12 +150,31 @@ class IntegracaoTest(unittest.TestCase):
             adulterado["data"]["cliente"] = "Adulterado"
             publicar_corpo(publicador.canal, tipo, serializar(adulterado))
             estoque.esperar("DESCARTADO pedido.criado")
+            # Mesmo assinado por um produtor conhecido, conteúdo inválido é descartado.
+            malformado = json.loads(valido)["data"]
+            malformado["itens"][0]["produto_id"] = []
+            publicador.publicar(tipo, malformado)
             publicar_corpo(publicador.canal, tipo, valido)
             publicar_corpo(publicador.canal, tipo, valido)
             estoque.esperar(f"RESERVA {dados['pedido_id']}")
             publicador.publicar("pedido.excluido", {"pedido_id": dados["pedido_id"]})
             estoque.esperar(f"DEVOLUCAO {dados['pedido_id']} {{'1': 2}} SALDOS {{'1': 10")
             self.assertEqual(sum(f"RESERVA {dados['pedido_id']}" in l for l in estoque.linhas), 1)
+            self.assertEqual(sum("DESCARTADO pedido.criado" in l for l in estoque.linhas), 2)
+        finally:
+            publicador.fechar()
+
+    def test_principal_descarta_id_invalido_e_continua_consumindo(self):
+        principal = self.iniciar("principal")
+        principal.enviar("Teste\n")
+        principal.esperar("1 Produtos")
+        publicador = Publicador("entrega")
+        try:
+            publicador.publicar("pedido.enviado", {"pedido_id": []})
+            principal.esperar("DESCARTADO pedido.enviado")
+            pedido_id = self.criar(principal, "1:1")
+            publicador.publicar("pedido.enviado", {"pedido_id": pedido_id, "nota_id": "teste"})
+            principal.esperar(f"STATUS {pedido_id} enviado")
         finally:
             publicador.fechar()
 

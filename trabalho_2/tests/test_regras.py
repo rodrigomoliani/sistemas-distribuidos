@@ -94,6 +94,22 @@ class RegrasTest(unittest.TestCase):
             self.estoque.tratar(self.tipo, self.pedido)
         self.assertEqual(self.estoque.saldos["1"], 10)
 
+    def test_identificador_de_produto_invalido_e_rejeitado_sem_reserva(self):
+        for produto_id in ([], {}, None, 1):
+            with self.subTest(produto_id=produto_id):
+                self.pedido["itens"][0]["produto_id"] = produto_id
+                with self.assertRaises(ValueError):
+                    self.estoque.tratar(self.tipo, self.pedido)
+                self.assertEqual(self.estoque.saldos, {"1": 10, "2": 10, "3": 10})
+                self.assertEqual(self.estoque.reservas, {})
+
+    def test_identificador_de_pedido_invalido_nao_altera_o_principal(self):
+        for pedido_id in ([], {}, None, "", 1):
+            with self.subTest(pedido_id=pedido_id):
+                with self.assertRaises(ValueError):
+                    self.principal.tratar("pedido.enviado", {"pedido_id": pedido_id})
+                self.assertEqual(self.principal.pedidos[self.id]["status"], "criado")
+
 
 if __name__ == "__main__":
     unittest.main()
