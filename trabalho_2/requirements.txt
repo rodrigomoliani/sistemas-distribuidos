@@ -1,2 +1,8 @@
+# Dependências Python instaladas com pip install -r requirements.txt.
+# == fixa as versões para reproduzir o ambiente usado no trabalho.
+
+# Cliente AMQP: abre conexões/canais, publica, consome e confirma mensagens.
 pika==1.3.2
+
+# PyCryptodome fornece RSA, SHA-256 e assinaturas PKCS#1 v1.5 via pacote Crypto.
 pycryptodome==3.23.0

@@ -1,12 +1,41 @@
+# Infraestrutura da demonstração: apenas RabbitMQ roda em Docker.
+# Os sete programas Python são iniciados localmente em terminais separados.
+
+# Mapa dos serviços gerenciados pelo Docker Compose.
 services:
+
+  # Nome do serviço do broker dentro deste Compose.
   rabbitmq:
+
+    # Imagem com versão fixada. A variante escolhida não é a imagem management.
     image: rabbitmq:4.3.5
+
+    # Arquivos do computador que serão disponibilizados dentro do contêiner.
     volumes:
+
+      # Monta a configuração local do RabbitMQ no caminho esperado; ro significa
+      # somente leitura dentro do contêiner. Não é um volume de dados persistentes.
       - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+
+    # Portas expostas do contêiner para o computador.
     ports:
+
+      # Vincula AMQP à interface local 127.0.0.1:5672 e encaminha à porta 5672.
+      # Não publica porta de painel web ou API HTTP de administração.
       - "127.0.0.1:5672:5672"
+
+    # Verificação usada pelo Docker para acompanhar a saúde do broker.
     healthcheck:
+
+      # Executa rabbitmq-diagnostics dentro do contêiner; -q reduz saída.
+      # ping verifica o runtime/nó, não testa o fluxo completo dos pedidos.
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+
+      # Intervalo de cinco segundos entre verificações.
       interval: 5s
+
+      # Limite de cinco segundos para cada execução do teste de saúde.
       timeout: 5s
+
+      # Quantidade de falhas consecutivas antes de considerar o serviço unhealthy.
       retries: 12

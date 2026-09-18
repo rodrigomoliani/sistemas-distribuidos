@@ -1,9 +1,30 @@
+# Arquivos locais que não devem entrar em novos commits.
+# ** aplica o padrão em qualquer pasta, inclusive nos próximos trabalhos.
+# Essas regras não removem do histórico arquivos que já estejam versionados.
+
+# Ambientes virtuais: instalados localmente, não copiados para o repositório.
 **/.venv/
+
+# Cache de módulos gerado pelo interpretador Python.
 **/__pycache__/
+
+# Cache de execução do pytest, caso essa ferramenta seja utilizada.
 **/.pytest_cache/
+
+# Arquivos compilados Python: pyc, pyo e pyd.
 **/*.py[cod]
+
+# Chaves privadas e cópias públicas geradas na preparação local.
 **/chaves/
+
+# Arquivos locais de variáveis de ambiente, que podem conter credenciais.
 **/.env
+
+# Logs gerados durante a execução.
 **/*.log
+
+# Saídas locais de testes que não fazem parte do código-fonte.
 **/test-results/
+
+# Metadados do explorador de arquivos do macOS.
 .DS_Store
