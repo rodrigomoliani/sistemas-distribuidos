@@ -1,0 +1,2317 @@
+/* Estilos da loja: cores, catálogo, sacola, pedidos, acessibilidade e adaptação a telas menores. */
+
+/* Carrega as fontes opcionais do Google Fonts; o CSS mantém fallback para fontes locais. */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+/* Declara as cores compartilhadas utilizadas pelas regras da loja. */
+:root {
+
+  /* Define a variável de cor --verde para reutilizá-la com var(). */
+  --verde: #1c5e49;
+
+  /* Define a variável de cor --texto para reutilizá-la com var(). */
+  --texto: #203b32;
+
+  /* Define a variável de cor --muted para reutilizá-la com var(). */
+  --muted: #6d7c75;
+
+  /* Define a variável de cor --fundo para reutilizá-la com var(). */
+  --fundo: #fbfcf9;
+
+  /* Define a variável de cor --borda para reutilizá-la com var(). */
+  --borda: #dfe6dd;
+
+  /* Define a variável de cor --claro para reutilizá-la com var(). */
+  --claro: #edf2e9;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Aplica o ajuste básico de dimensionamento a todos os elementos. */
+* {
+
+  /* Inclui borda e preenchimento no cálculo da largura e altura do elemento. */
+  box-sizing: border-box;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Configura rolagem e navegação por âncoras do documento. */
+html {
+
+  /* Suaviza a rolagem até as seções acessadas pelos links internos. */
+  scroll-behavior: smooth;
+
+  /* Reserva espaço acima da seção ao navegar por uma âncora. */
+  scroll-padding-top: 25px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Define o fundo, a tipografia e o espaço da página inteira. */
+body {
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 0;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: var(--fundo);
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--texto);
+
+  /* Seleciona a família tipográfica e os fallbacks disponíveis no sistema. */
+  font-family: "DM Sans", system-ui, sans-serif;
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 14px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona button para aplicar os estilos deste bloco. */
+button,
+
+/* Seleciona input para aplicar os estilos deste bloco. */
+input {
+
+  /* Configura em conjunto peso, tamanho e família tipográfica. */
+  font: inherit;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona button para aplicar os estilos deste bloco. */
+button,
+
+/* Seleciona a para aplicar os estilos deste bloco. */
+a {
+
+  /* Permite gestos usuais e facilita a resposta de cliques em dispositivos com toque. */
+  touch-action: manipulation;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona a para aplicar os estilos deste bloco. */
+a {
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: inherit;
+
+  /* Define ou remove o sublinhado de links e botões de texto. */
+  text-decoration: none;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona button para aplicar os estilos deste bloco. */
+button {
+
+  /* Escolhe o cursor de interação; pointer indica ação e default indica controle indisponível. */
+  cursor: pointer;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Aplica a aparência dos botões indisponíveis, sem sugerir que podem ser clicados. */
+button:disabled {
+
+  /* Reduz a opacidade para comunicar visualmente um estado desabilitado. */
+  opacity: 0.45;
+
+  /* Escolhe o cursor de interação; pointer indica ação e default indica controle indisponível. */
+  cursor: default;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Aplica o destaque de foco quando o controle é usado pelo teclado. */
+button:focus-visible,
+
+/* Aplica o destaque de foco quando o controle é usado pelo teclado. */
+a:focus-visible,
+
+/* Aplica o destaque de foco quando o controle é usado pelo teclado. */
+input:focus-visible {
+
+  /* Mostra um contorno de foco acessível para navegação com teclado. */
+  outline: 3px solid #c19e58;
+
+  /* Afasta o contorno de foco da borda do controle. */
+  outline-offset: 3px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Organiza marca, navegação e indicador de conexão no cabeçalho. */
+.topbar {
+
+  /* Define a altura do componente ou da área ilustrada. */
+  height: 86px;
+
+  /* Impede que o componente ultrapasse a largura escolhida. */
+  max-width: 1320px;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 0 48px;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: auto;
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Alinha os itens no eixo transversal do layout flex ou grid. */
+  align-items: center;
+
+  /* Distribui os itens no eixo principal do layout. */
+  justify-content: space-between;
+
+  /* Desenha a divisória inferior desta área. */
+  border-bottom: 1px solid var(--borda);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Define a tipografia e o alinhamento da marca da loja. */
+.marca {
+
+  /* Seleciona a família tipográfica e os fallbacks disponíveis no sistema. */
+  font-family: Manrope, system-ui;
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 22px;
+
+  /* Controla o peso visual do texto, destacando títulos ou ações. */
+  font-weight: 800;
+
+  /* Ajusta a distância entre caracteres para a hierarquia visual. */
+  letter-spacing: -1px;
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Alinha os itens no eixo transversal do layout flex ou grid. */
+  align-items: center;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 3px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .marca > span:not(.icone-marca) para aplicar os estilos deste bloco. */
+.marca > span:not(.icone-marca) {
+
+  /* Controla o peso visual do texto, destacando títulos ou ações. */
+  font-weight: 400;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .icone-marca para aplicar os estilos deste bloco. */
+.icone-marca {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: grid;
+
+  /* Centraliza ou alinha os itens nos dois eixos do grid. */
+  place-items: center;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: var(--verde);
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: white;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 8px;
+
+  /* Define a largura do componente, podendo respeitar a largura disponível. */
+  width: 35px;
+
+  /* Define a altura do componente ou da área ilustrada. */
+  height: 35px;
+
+  /* Reserva espaço externo à direita do elemento. */
+  margin-right: 7px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .topbar nav para aplicar os estilos deste bloco. */
+.topbar nav {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 32px;
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 13px;
+
+  /* Controla o peso visual do texto, destacando títulos ou ações. */
+  font-weight: 500;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Aplica o feedback visual quando o ponteiro passa sobre este elemento. */
+.topbar nav a:hover {
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--verde);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .conexao para aplicar os estilos deste bloco. */
+.conexao {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 11px;
+
+  /* Configura espessura, estilo e cor da borda. */
+  border: 1px solid var(--borda);
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 8px 12px;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 30px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Estiliza o detalhe decorativo inserido antes do conteúdo deste elemento. */
+.conexao::before {
+
+  /* Cria o detalhe visual do pseudo-elemento, como o indicador de conexão. */
+  content: "";
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: inline-block;
+
+  /* Define a largura do componente, podendo respeitar a largura disponível. */
+  width: 6px;
+
+  /* Define a altura do componente ou da área ilustrada. */
+  height: 6px;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #d0aa53;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 50%;
+
+  /* Reserva espaço externo à direita do elemento. */
+  margin-right: 7px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Estiliza o detalhe decorativo inserido antes do conteúdo deste elemento. */
+.conexao.online::before {
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #569c67;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona main para aplicar os estilos deste bloco. */
+main {
+
+  /* Impede que o componente ultrapasse a largura escolhida. */
+  max-width: 1320px;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 0 48px;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: auto;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Distribui título, chamada e ilustração na abertura da página. */
+.hero {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: grid;
+
+  /* Define as colunas do layout, adaptando a divisão entre catálogo e sacola. */
+  grid-template-columns: 1fr 1fr;
+
+  /* Alinha os itens no eixo transversal do layout flex ou grid. */
+  align-items: center;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 35px;
+
+  /* Garante espaço vertical mínimo, mesmo quando o conteúdo é curto. */
+  min-height: 442px;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 45px 0;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .sobretitulo para aplicar os estilos deste bloco. */
+.sobretitulo {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 10px;
+
+  /* Controla o peso visual do texto, destacando títulos ou ações. */
+  font-weight: 700;
+
+  /* Ajusta a distância entre caracteres para a hierarquia visual. */
+  letter-spacing: 1.8px;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 0 0 17px;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: #657c6a;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona h1 para aplicar os estilos deste bloco. */
+h1,
+
+/* Seleciona h2 para aplicar os estilos deste bloco. */
+h2,
+
+/* Seleciona h3 para aplicar os estilos deste bloco. */
+h3 {
+
+  /* Seleciona a família tipográfica e os fallbacks disponíveis no sistema. */
+  font-family: Manrope, system-ui;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona h1 para aplicar os estilos deste bloco. */
+h1 {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: clamp(36px, 4.3vw, 57px);
+
+  /* Define a altura das linhas e o espaçamento vertical do texto. */
+  line-height: 1.1;
+
+  /* Controla o peso visual do texto, destacando títulos ou ações. */
+  font-weight: 600;
+
+  /* Ajusta a distância entre caracteres para a hierarquia visual. */
+  letter-spacing: -2.8px;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 0 0 24px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .intro para aplicar os estilos deste bloco. */
+.intro {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 14px;
+
+  /* Define a altura das linhas e o espaçamento vertical do texto. */
+  line-height: 1.8;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--muted);
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 0 0 26px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .botao para aplicar os estilos deste bloco. */
+.botao {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: inline-flex;
+
+  /* Distribui os itens no eixo principal do layout. */
+  justify-content: center;
+
+  /* Alinha os itens no eixo transversal do layout flex ou grid. */
+  align-items: center;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 22px;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: var(--verde);
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: white;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 13px 19px;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 6px;
+
+  /* Configura espessura, estilo e cor da borda. */
+  border: 1px solid var(--verde);
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 12px;
+
+  /* Controla o peso visual do texto, destacando títulos ou ações. */
+  font-weight: 600;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Aplica o feedback visual quando o ponteiro passa sobre este elemento. */
+.botao:hover {
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #124f3b;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .hero-arte para aplicar os estilos deste bloco. */
+.hero-arte {
+
+  /* Define a altura do componente ou da área ilustrada. */
+  height: 342px;
+
+  /* Define se o posicionamento segue o fluxo ou usa um elemento de referência. */
+  position: relative;
+
+  /* Oculta os trechos da ilustração que ultrapassam a área definida. */
+  overflow: hidden;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 12px;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #edf0e4;
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: grid;
+
+  /* Centraliza ou alinha os itens nos dois eixos do grid. */
+  place-items: center;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .orbita para aplicar os estilos deste bloco. */
+.orbita {
+
+  /* Configura espessura, estilo e cor da borda. */
+  border: 1px solid #cad5bc;
+
+  /* Define se o posicionamento segue o fluxo ou usa um elemento de referência. */
+  position: absolute;
+
+  /* Define a largura do componente, podendo respeitar a largura disponível. */
+  width: 360px;
+
+  /* Define a altura do componente ou da área ilustrada. */
+  height: 360px;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 50%;
+
+  /* Posiciona a borda esquerda do elemento em relação ao seu contêiner. */
+  left: 54%;
+
+  /* Posiciona a borda superior do elemento em relação ao seu contêiner. */
+  top: -10%;
+
+  /* Aplica rotação, deslocamento ou escala à ilustração ou ao componente. */
+  transform: rotate(35deg);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .orbita2 para aplicar os estilos deste bloco. */
+.orbita2 {
+
+  /* Posiciona a borda esquerda do elemento em relação ao seu contêiner. */
+  left: -22%;
+
+  /* Posiciona a borda superior do elemento em relação ao seu contêiner. */
+  top: 45%;
+
+  /* Define a largura do componente, podendo respeitar a largura disponível. */
+  width: 280px;
+
+  /* Define a altura do componente ou da área ilustrada. */
+  height: 280px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .caderno-hero para aplicar os estilos deste bloco. */
+.caderno-hero {
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #b9cba6;
+
+  /* Define a largura do componente, podendo respeitar a largura disponível. */
+  width: 175px;
+
+  /* Define a altura do componente ou da área ilustrada. */
+  height: 232px;
+
+  /* Aplica rotação, deslocamento ou escala à ilustração ou ao componente. */
+  transform: rotate(-13deg);
+
+  /* Seleciona box-shadow: para aplicar os estilos deste bloco. */
+  box-shadow:
+
+    /* Seleciona 16px 18px 0 #cad5bd para aplicar os estilos deste bloco. */
+    16px 18px 0 #cad5bd,
+
+    /* Seleciona 22px 30px 28px #3d543427; para aplicar os estilos deste bloco. */
+    22px 30px 28px #3d543427;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 4px;
+
+  /* Define se o posicionamento segue o fluxo ou usa um elemento de referência. */
+  position: relative;
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Escolhe a direção em que os itens flex são organizados. */
+  flex-direction: column;
+
+  /* Distribui os itens no eixo principal do layout. */
+  justify-content: center;
+
+  /* Reserva espaço interno à esquerda do conteúdo. */
+  padding-left: 29px;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: #345441;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .caderno-hero i para aplicar os estilos deste bloco. */
+.caderno-hero i {
+
+  /* Define se o posicionamento segue o fluxo ou usa um elemento de referência. */
+  position: absolute;
+
+  /* Posiciona a borda esquerda do elemento em relação ao seu contêiner. */
+  left: 10px;
+
+  /* Posiciona a borda superior do elemento em relação ao seu contêiner. */
+  top: 0;
+
+  /* Posiciona a borda inferior do elemento em relação ao seu contêiner. */
+  bottom: 0;
+
+  /* Desenha a borda esquerda utilizada neste detalhe visual. */
+  border-left: 1px solid #91a780;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .caderno-hero span para aplicar os estilos deste bloco. */
+.caderno-hero span {
+
+  /* Seleciona font: para aplicar os estilos deste bloco. */
+  font:
+
+    /* Seleciona 800 25px/1.2 Manrope para aplicar os estilos deste bloco. */
+    800 25px/1.2 Manrope,
+
+    /* Seleciona system-ui; para aplicar os estilos deste bloco. */
+    system-ui;
+
+  /* Ajusta a distância entre caracteres para a hierarquia visual. */
+  letter-spacing: -0.7px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .caderno-hero b para aplicar os estilos deste bloco. */
+.caderno-hero b {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 8px;
+
+  /* Define se o posicionamento segue o fluxo ou usa um elemento de referência. */
+  position: absolute;
+
+  /* Posiciona a borda inferior do elemento em relação ao seu contêiner. */
+  bottom: 19px;
+
+  /* Ajusta a distância entre caracteres para a hierarquia visual. */
+  letter-spacing: 2px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .tag-hero para aplicar os estilos deste bloco. */
+.tag-hero {
+
+  /* Define se o posicionamento segue o fluxo ou usa um elemento de referência. */
+  position: absolute;
+
+  /* Posiciona a borda inferior do elemento em relação ao seu contêiner. */
+  bottom: 27px;
+
+  /* Posiciona a borda direita do elemento em relação ao seu contêiner. */
+  right: 24px;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #ffffffbb;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 10px 16px;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 25px;
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 10px;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: #56654f;
+
+  /* Aplica rotação, deslocamento ou escala à ilustração ou ao componente. */
+  transform: rotate(-4deg);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .faixa para aplicar os estilos deste bloco. */
+.faixa {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Distribui os itens no eixo principal do layout. */
+  justify-content: space-between;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 19px 0;
+
+  /* Desenha a divisória superior desta área. */
+  border-top: 1px solid var(--borda);
+
+  /* Desenha a divisória inferior desta área. */
+  border-bottom: 1px solid var(--borda);
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 11px;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--muted);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .secao para aplicar os estilos deste bloco. */
+.secao {
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 52px 0;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .titulo-secao para aplicar os estilos deste bloco. */
+.titulo-secao {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Alinha os itens no eixo transversal do layout flex ou grid. */
+  align-items: center;
+
+  /* Distribui os itens no eixo principal do layout. */
+  justify-content: space-between;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 16px;
+
+  /* Separa o elemento do conteúdo seguinte. */
+  margin-bottom: 27px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .titulo-secao .sobretitulo para aplicar os estilos deste bloco. */
+.titulo-secao .sobretitulo {
+
+  /* Separa o elemento do conteúdo seguinte. */
+  margin-bottom: 10px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona h2 para aplicar os estilos deste bloco. */
+h2 {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 29px;
+
+  /* Ajusta a distância entre caracteres para a hierarquia visual. */
+  letter-spacing: -1.2px;
+
+  /* Controla o peso visual do texto, destacando títulos ou ações. */
+  font-weight: 600;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 0;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .secundario para aplicar os estilos deste bloco. */
+.secundario {
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: transparent;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--verde);
+
+  /* Ajusta somente a cor da borda, preservando seu formato. */
+  border-color: var(--borda);
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 10px 14px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Aplica o feedback visual quando o ponteiro passa sobre este elemento. */
+.secundario:hover {
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: var(--claro);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Divide a área da loja entre catálogo e sacola. */
+.loja-layout {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: grid;
+
+  /* Define as colunas do layout, adaptando a divisão entre catálogo e sacola. */
+  grid-template-columns: minmax(0, 1fr) 290px;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 28px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .filtros para aplicar os estilos deste bloco. */
+.filtros {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 7px;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 0 0 22px;
+
+  /* Permite quebra de linha quando os controles não cabem na largura disponível. */
+  flex-wrap: wrap;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .filtro para aplicar os estilos deste bloco. */
+.filtro {
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 7px 15px;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: transparent;
+
+  /* Configura espessura, estilo e cor da borda. */
+  border: 1px solid var(--borda);
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 30px;
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 11px;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--muted);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .filtro.ativo para aplicar os estilos deste bloco. */
+.filtro.ativo {
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--verde);
+
+  /* Ajusta somente a cor da borda, preservando seu formato. */
+  border-color: #b7cbb9;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #edf2e9;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Distribui os cartões de produtos em colunas responsivas. */
+.produtos {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: grid;
+
+  /* Define as colunas do layout, adaptando a divisão entre catálogo e sacola. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 16px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .produto para aplicar os estilos deste bloco. */
+.produto {
+
+  /* Permite que o item encolha corretamente dentro do grid ou do flex. */
+  min-width: 0;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .produto-arte para aplicar os estilos deste bloco. */
+.produto-arte {
+
+  /* Define a altura do componente ou da área ilustrada. */
+  height: 190px;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 10px;
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: grid;
+
+  /* Centraliza ou alinha os itens nos dois eixos do grid. */
+  place-items: center;
+
+  /* Define se o posicionamento segue o fluxo ou usa um elemento de referência. */
+  position: relative;
+
+  /* Oculta os trechos da ilustração que ultrapassam a área definida. */
+  overflow: hidden;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #eaf0e4;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .produto-arte.B para aplicar os estilos deste bloco. */
+.produto-arte.B {
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #eee9de;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .produto-arte.C para aplicar os estilos deste bloco. */
+.produto-arte.C {
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #e7ecee;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .produto-arte svg para aplicar os estilos deste bloco. */
+.produto-arte svg {
+
+  /* Define a largura do componente, podendo respeitar a largura disponível. */
+  width: 120px;
+
+  /* Define a altura do componente ou da área ilustrada. */
+  height: 130px;
+
+  /* Aplica sombra à forma do SVG, mantendo o fundo transparente. */
+  filter: drop-shadow(4px 10px 8px #00000016);
+
+  /* Suaviza a transformação da ilustração quando o produto recebe hover. */
+  transition: transform 0.25s;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Aplica o feedback visual quando o ponteiro passa sobre este elemento. */
+.produto:hover svg {
+
+  /* Aplica rotação, deslocamento ou escala à ilustração ou ao componente. */
+  transform: translateY(-4px) rotate(-3deg);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .categoria-tag para aplicar os estilos deste bloco. */
+.categoria-tag {
+
+  /* Define se o posicionamento segue o fluxo ou usa um elemento de referência. */
+  position: absolute;
+
+  /* Posiciona a borda superior do elemento em relação ao seu contêiner. */
+  top: 12px;
+
+  /* Posiciona a borda esquerda do elemento em relação ao seu contêiner. */
+  left: 12px;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #ffffffa3;
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 9px;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 4px;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 5px 8px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .produto-info para aplicar os estilos deste bloco. */
+.produto-info {
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 14px 1px 0;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .produto-info h3 para aplicar os estilos deste bloco. */
+.produto-info h3 {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 14px;
+
+  /* Ajusta a distância entre caracteres para a hierarquia visual. */
+  letter-spacing: -0.3px;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 0 0 6px;
+
+  /* Controla o peso visual do texto, destacando títulos ou ações. */
+  font-weight: 600;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .produto-sub para aplicar os estilos deste bloco. */
+.produto-sub {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 10px;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--muted);
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 0 0 13px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .produto-preco para aplicar os estilos deste bloco. */
+.produto-preco {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Alinha os itens no eixo transversal do layout flex ou grid. */
+  align-items: center;
+
+  /* Distribui os itens no eixo principal do layout. */
+  justify-content: space-between;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 5px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .produto-preco strong para aplicar os estilos deste bloco. */
+.produto-preco strong {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 14px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .adicionar para aplicar os estilos deste bloco. */
+.adicionar {
+
+  /* Define a altura do componente ou da área ilustrada. */
+  height: 30px;
+
+  /* Define a largura do componente, podendo respeitar a largura disponível. */
+  width: 30px;
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 20px;
+
+  /* Configura espessura, estilo e cor da borda. */
+  border: 1px solid var(--borda);
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 50%;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--verde);
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: transparent;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Aplica o feedback visual quando o ponteiro passa sobre este elemento. */
+.adicionar:hover {
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: var(--claro);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Destaca a área de itens, total e finalização do pedido. */
+.sacola {
+
+  /* Configura espessura, estilo e cor da borda. */
+  border: 1px solid var(--borda);
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 22px;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 10px;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: white;
+
+  /* Define o alinhamento deste item sem afetar os demais. */
+  align-self: start;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .sacola-titulo para aplicar os estilos deste bloco. */
+.sacola-titulo {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Distribui os itens no eixo principal do layout. */
+  justify-content: space-between;
+
+  /* Alinha os itens no eixo transversal do layout flex ou grid. */
+  align-items: center;
+
+  /* Reserva espaço interno abaixo do conteúdo. */
+  padding-bottom: 17px;
+
+  /* Desenha a divisória inferior desta área. */
+  border-bottom: 1px solid var(--borda);
+
+  /* Separa o elemento do conteúdo seguinte. */
+  margin-bottom: 17px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .sacola-titulo h3 para aplicar os estilos deste bloco. */
+.sacola-titulo h3 {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 16px;
+
+  /* Ajusta a distância entre caracteres para a hierarquia visual. */
+  letter-spacing: -0.5px;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 0;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .sacola-titulo > span para aplicar os estilos deste bloco. */
+.sacola-titulo > span {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 11px;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: var(--claro);
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 50%;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 4px 7px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .vazio para aplicar os estilos deste bloco. */
+.vazio {
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--muted);
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 12px;
+
+  /* Define a altura das linhas e o espaçamento vertical do texto. */
+  line-height: 1.8;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .sacola-item para aplicar os estilos deste bloco. */
+.sacola-item {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Alinha os itens no eixo transversal do layout flex ou grid. */
+  align-items: center;
+
+  /* Distribui os itens no eixo principal do layout. */
+  justify-content: space-between;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 8px;
+
+  /* Separa o elemento do conteúdo seguinte. */
+  margin-bottom: 16px;
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 11px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .sacola-item strong para aplicar os estilos deste bloco. */
+.sacola-item strong {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: block;
+
+  /* Separa o elemento do conteúdo seguinte. */
+  margin-bottom: 5px;
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 12px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .contador para aplicar os estilos deste bloco. */
+.contador {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Alinha os itens no eixo transversal do layout flex ou grid. */
+  align-items: center;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 8px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .contador button para aplicar os estilos deste bloco. */
+.contador button {
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: none;
+
+  /* Configura espessura, estilo e cor da borda. */
+  border: 1px solid var(--borda);
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--verde);
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 4px;
+
+  /* Define a largura do componente, podendo respeitar a largura disponível. */
+  width: 22px;
+
+  /* Define a altura do componente ou da área ilustrada. */
+  height: 23px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .total para aplicar os estilos deste bloco. */
+.total {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Distribui os itens no eixo principal do layout. */
+  justify-content: space-between;
+
+  /* Desenha a divisória superior desta área. */
+  border-top: 1px solid var(--borda);
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 18px 0;
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 12px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .total strong para aplicar os estilos deste bloco. */
+.total strong {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 17px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona label para aplicar os estilos deste bloco. */
+label {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: block;
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 11px;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 0 0 8px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona input:not([type="checkbox"]) para aplicar os estilos deste bloco. */
+input:not([type="checkbox"]) {
+
+  /* Define a largura do componente, podendo respeitar a largura disponível. */
+  width: 100%;
+
+  /* Configura espessura, estilo e cor da borda. */
+  border: 1px solid var(--borda);
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 6px;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 12px;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: white;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--texto);
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 12px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona input::placeholder para aplicar os estilos deste bloco. */
+input::placeholder {
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: #99a298;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .finalizar para aplicar os estilos deste bloco. */
+.finalizar {
+
+  /* Define a largura do componente, podendo respeitar a largura disponível. */
+  width: 100%;
+
+  /* Separa o elemento do conteúdo anterior. */
+  margin-top: 12px;
+
+  /* Distribui os itens no eixo principal do layout. */
+  justify-content: space-between;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .nota para aplicar os estilos deste bloco. */
+.nota {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 10px;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--muted);
+
+  /* Define a altura das linhas e o espaçamento vertical do texto. */
+  line-height: 1.7;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 15px 0 0;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .texto-suave para aplicar os estilos deste bloco. */
+.texto-suave {
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--muted);
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 11px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .pedidos-secao para aplicar os estilos deste bloco. */
+.pedidos-secao {
+
+  /* Desenha a divisória superior desta área. */
+  border-top: 1px solid var(--borda);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .grande para aplicar os estilos deste bloco. */
+.grande {
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 25px;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #f1f4ee;
+
+  /* Configura espessura, estilo e cor da borda. */
+  border: 1px dashed #d3decf;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 8px;
+
+  /* Alinha o texto dentro da largura disponível. */
+  text-align: center;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .pedido-card para aplicar os estilos deste bloco. */
+.pedido-card {
+
+  /* Configura espessura, estilo e cor da borda. */
+  border: 1px solid var(--borda);
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 10px;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: white;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 23px;
+
+  /* Separa o elemento do conteúdo seguinte. */
+  margin-bottom: 15px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .pedido-cabecalho para aplicar os estilos deste bloco. */
+.pedido-cabecalho {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Distribui os itens no eixo principal do layout. */
+  justify-content: space-between;
+
+  /* Alinha os itens no eixo transversal do layout flex ou grid. */
+  align-items: center;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 12px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .pedido-cabecalho h3 para aplicar os estilos deste bloco. */
+.pedido-cabecalho h3 {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 14px;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 0 0 5px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .pedido-cabecalho p para aplicar os estilos deste bloco. */
+.pedido-cabecalho p {
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 0;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--muted);
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 11px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .status para aplicar os estilos deste bloco. */
+.status {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 10px;
+
+  /* Controla o peso visual do texto, destacando títulos ou ações. */
+  font-weight: 600;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 30px;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 7px 11px;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: var(--claro);
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--verde);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .status.erro para aplicar os estilos deste bloco. */
+.status.erro {
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: #8e433d;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #f8eae7;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Organiza as etapas recebidas em tempo real na linha do tempo. */
+.timeline {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 8px;
+
+  /* Permite quebra de linha quando os controles não cabem na largura disponível. */
+  flex-wrap: wrap;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 19px 0 0;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 16px 0 0;
+
+  /* Desenha a divisória superior desta área. */
+  border-top: 1px solid var(--borda);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .etapa para aplicar os estilos deste bloco. */
+.etapa {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 10px;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--muted);
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #f6f8f3;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 4px;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 6px 9px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .pedido-acoes para aplicar os estilos deste bloco. */
+.pedido-acoes {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Alinha os itens no eixo transversal do layout flex ou grid. */
+  align-items: center;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 14px;
+
+  /* Separa o elemento do conteúdo anterior. */
+  margin-top: 16px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .link-botao para aplicar os estilos deste bloco. */
+.link-botao {
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: transparent;
+
+  /* Configura espessura, estilo e cor da borda. */
+  border: 0;
+
+  /* Define ou remove o sublinhado de links e botões de texto. */
+  text-decoration: underline;
+
+  /* Afasta o sublinhado do texto para manter a leitura clara. */
+  text-underline-offset: 3px;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--muted);
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 11px;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 8px 0;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Organiza o texto e o formulário de inscrição em promoções. */
+.promocoes {
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 38px 42px;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #edf2e9;
+
+  /* Configura espessura, estilo e cor da borda. */
+  border: 1px solid #dce5d6;
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: grid;
+
+  /* Define as colunas do layout, adaptando a divisão entre catálogo e sacola. */
+  grid-template-columns: 1fr 1fr;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 48px;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 12px;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 0 0 55px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .promocoes h2 para aplicar os estilos deste bloco. */
+.promocoes h2 {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 30px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .promocoes p para aplicar os estilos deste bloco. */
+.promocoes p {
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--muted);
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 12px;
+
+  /* Define a altura das linhas e o espaçamento vertical do texto. */
+  line-height: 1.7;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .promocoes .sobretitulo para aplicar os estilos deste bloco. */
+.promocoes .sobretitulo {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 9px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Agrupa as categorias de interesse em controles que podem quebrar linha. */
+fieldset {
+
+  /* Configura espessura, estilo e cor da borda. */
+  border: 0;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 0;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 16px 0;
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 18px;
+
+  /* Permite quebra de linha quando os controles não cabem na largura disponível. */
+  flex-wrap: wrap;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona legend para aplicar os estilos deste bloco. */
+legend {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 11px;
+
+  /* Separa o elemento do conteúdo seguinte. */
+  margin-bottom: 10px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona fieldset label para aplicar os estilos deste bloco. */
+fieldset label {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Alinha os itens no eixo transversal do layout flex ou grid. */
+  align-items: center;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 5px;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: 0;
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 11px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona input[type="checkbox"] para aplicar os estilos deste bloco. */
+input[type="checkbox"] {
+
+  /* Usa a cor de destaque da loja nas caixas de seleção. */
+  accent-color: var(--verde);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .acoes para aplicar os estilos deste bloco. */
+.acoes {
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 18px;
+
+  /* Alinha os itens no eixo transversal do layout flex ou grid. */
+  align-items: center;
+
+  /* Permite quebra de linha quando os controles não cabem na largura disponível. */
+  flex-wrap: wrap;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Organiza a marca e a identificação acadêmica no rodapé. */
+footer {
+
+  /* Impede que o componente ultrapasse a largura escolhida. */
+  max-width: 1320px;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 24px 48px 35px;
+
+  /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
+  margin: auto;
+
+  /* Desenha a divisória superior desta área. */
+  border-top: 1px solid var(--borda);
+
+  /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+  display: flex;
+
+  /* Distribui os itens no eixo principal do layout. */
+  justify-content: space-between;
+
+  /* Alinha os itens no eixo transversal do layout flex ou grid. */
+  align-items: center;
+
+  /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+  gap: 16px;
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 10px;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--muted);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona footer .marca para aplicar os estilos deste bloco. */
+footer .marca {
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 18px;
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: var(--texto);
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Posiciona o aviso temporário sobre a página. */
+.toast {
+
+  /* Define se o posicionamento segue o fluxo ou usa um elemento de referência. */
+  position: fixed;
+
+  /* Posiciona a borda inferior do elemento em relação ao seu contêiner. */
+  bottom: 25px;
+
+  /* Posiciona a borda esquerda do elemento em relação ao seu contêiner. */
+  left: 50%;
+
+  /* Aplica rotação, deslocamento ou escala à ilustração ou ao componente. */
+  transform: translateX(-50%);
+
+  /* Impede que o componente ultrapasse a largura escolhida. */
+  max-width: 90vw;
+
+  /* Define o espaço interno entre o conteúdo e a borda. */
+  padding: 15px 23px;
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: var(--texto);
+
+  /* Define a cor do texto ou dos ícones que herdam a cor atual. */
+  color: white;
+
+  /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
+  border-radius: 8px;
+
+  /* Adiciona profundidade com uma sombra ao redor do componente. */
+  box-shadow: 0 8px 25px #0002;
+
+  /* Mantém o aviso temporário acima dos demais elementos da página. */
+  z-index: 5;
+
+  /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+  font-size: 12px;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .toast.erro para aplicar os estilos deste bloco. */
+.toast.erro {
+
+  /* Define a cor ou transparência do fundo desta área. */
+  background: #884337;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Seleciona .sem-produtos para aplicar os estilos deste bloco. */
+.sem-produtos {
+
+  /* Escolhe as colunas ocupadas pelo item; 1 / -1 abrange toda a linha. */
+  grid-column: 1/-1;
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Aplica os ajustes responsivos somente à faixa de largura indicada nesta condição. */
+@media (min-width: 1450px) {
+
+  /* Distribui título, chamada e ilustração na abertura da página. */
+  .hero {
+
+    /* Garante espaço vertical mínimo, mesmo quando o conteúdo é curto. */
+    min-height: 470px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .hero-arte para aplicar os estilos deste bloco. */
+  .hero-arte {
+
+    /* Define a altura do componente ou da área ilustrada. */
+    height: 375px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .produto-arte para aplicar os estilos deste bloco. */
+  .produto-arte {
+
+    /* Define a altura do componente ou da área ilustrada. */
+    height: 215px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Aplica os ajustes responsivos somente à faixa de largura indicada nesta condição. */
+@media (max-width: 1000px) {
+
+  /* Seleciona main para aplicar os estilos deste bloco. */
+  main,
+
+  /* Organiza marca, navegação e indicador de conexão no cabeçalho. */
+  .topbar,
+
+  /* Organiza a marca e a identificação acadêmica no rodapé. */
+  footer {
+
+    /* Reserva espaço interno à esquerda do conteúdo. */
+    padding-left: 25px;
+
+    /* Reserva espaço interno à direita do conteúdo. */
+    padding-right: 25px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Divide a área da loja entre catálogo e sacola. */
+  .loja-layout {
+
+    /* Define as colunas do layout, adaptando a divisão entre catálogo e sacola. */
+    grid-template-columns: 1fr 260px;
+
+    /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+    gap: 20px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Distribui os cartões de produtos em colunas responsivas. */
+  .produtos {
+
+    /* Define as colunas do layout, adaptando a divisão entre catálogo e sacola. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Organiza o texto e o formulário de inscrição em promoções. */
+  .promocoes {
+
+    /* Define o espaço interno entre o conteúdo e a borda. */
+    padding: 30px;
+
+    /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+    gap: 25px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .hero-arte para aplicar os estilos deste bloco. */
+  .hero-arte {
+
+    /* Define a altura do componente ou da área ilustrada. */
+    height: 305px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .hero h1 para aplicar os estilos deste bloco. */
+  .hero h1 {
+
+    /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+    font-size: 44px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .faixa para aplicar os estilos deste bloco. */
+  .faixa {
+
+    /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+    font-size: 10px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Aplica os ajustes responsivos somente à faixa de largura indicada nesta condição. */
+@media (max-width: 720px) {
+
+  /* Organiza marca, navegação e indicador de conexão no cabeçalho. */
+  .topbar {
+
+    /* Define a altura do componente ou da área ilustrada. */
+    height: 70px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .topbar nav para aplicar os estilos deste bloco. */
+  .topbar nav {
+
+    /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+    display: none;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Distribui título, chamada e ilustração na abertura da página. */
+  .hero {
+
+    /* Define as colunas do layout, adaptando a divisão entre catálogo e sacola. */
+    grid-template-columns: 1fr;
+
+    /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+    gap: 25px;
+
+    /* Define o espaço interno entre o conteúdo e a borda. */
+    padding: 36px 0;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .hero-arte para aplicar os estilos deste bloco. */
+  .hero-arte {
+
+    /* Define a altura do componente ou da área ilustrada. */
+    height: 245px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .hero h1 para aplicar os estilos deste bloco. */
+  .hero h1 {
+
+    /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+    font-size: 44px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .caderno-hero para aplicar os estilos deste bloco. */
+  .caderno-hero {
+
+    /* Aplica rotação, deslocamento ou escala à ilustração ou ao componente. */
+    transform: rotate(-13deg) scale(0.8);
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .faixa para aplicar os estilos deste bloco. */
+  .faixa {
+
+    /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+    gap: 13px;
+
+    /* Permite quebra de linha quando os controles não cabem na largura disponível. */
+    flex-wrap: wrap;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Divide a área da loja entre catálogo e sacola. */
+  .loja-layout {
+
+    /* Define as colunas do layout, adaptando a divisão entre catálogo e sacola. */
+    grid-template-columns: 1fr;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Distribui os cartões de produtos em colunas responsivas. */
+  .produtos {
+
+    /* Define as colunas do layout, adaptando a divisão entre catálogo e sacola. */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    /* Define o espaço entre itens do grid ou flex sem margens individuais. */
+    gap: 10px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .produto-arte para aplicar os estilos deste bloco. */
+  .produto-arte {
+
+    /* Define a altura do componente ou da área ilustrada. */
+    height: 155px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .produto-arte svg para aplicar os estilos deste bloco. */
+  .produto-arte svg {
+
+    /* Define a largura do componente, podendo respeitar a largura disponível. */
+    width: 95px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .categoria-tag para aplicar os estilos deste bloco. */
+  .categoria-tag {
+
+    /* Posiciona a borda esquerda do elemento em relação ao seu contêiner. */
+    left: 7px;
+
+    /* Posiciona a borda superior do elemento em relação ao seu contêiner. */
+    top: 7px;
+
+    /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+    font-size: 8px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .secao para aplicar os estilos deste bloco. */
+  .secao {
+
+    /* Define o espaço interno entre o conteúdo e a borda. */
+    padding: 35px 0;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona h2 para aplicar os estilos deste bloco. */
+  h2 {
+
+    /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+    font-size: 25px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .titulo-secao para aplicar os estilos deste bloco. */
+  .titulo-secao {
+
+    /* Alinha os itens no eixo transversal do layout flex ou grid. */
+    align-items: end;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .texto-suave para aplicar os estilos deste bloco. */
+  .texto-suave {
+
+    /* Impede que o componente ultrapasse a largura escolhida. */
+    max-width: 100px;
+
+    /* Alinha o texto dentro da largura disponível. */
+    text-align: right;
+
+    /* Define a altura das linhas e o espaçamento vertical do texto. */
+    line-height: 1.5;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Organiza o texto e o formulário de inscrição em promoções. */
+  .promocoes {
+
+    /* Define as colunas do layout, adaptando a divisão entre catálogo e sacola. */
+    grid-template-columns: 1fr;
+
+    /* Separa o elemento do conteúdo seguinte. */
+    margin-bottom: 35px;
+
+    /* Define o espaço interno entre o conteúdo e a borda. */
+    padding: 26px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .pedido-card para aplicar os estilos deste bloco. */
+  .pedido-card {
+
+    /* Define o espaço interno entre o conteúdo e a borda. */
+    padding: 18px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .pedido-cabecalho para aplicar os estilos deste bloco. */
+  .pedido-cabecalho {
+
+    /* Alinha os itens no eixo transversal do layout flex ou grid. */
+    align-items: start;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .status para aplicar os estilos deste bloco. */
+  .status {
+
+    /* Impede que o componente ultrapasse a largura escolhida. */
+    max-width: 130px;
+
+    /* Alinha o texto dentro da largura disponível. */
+    text-align: center;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Organiza a marca e a identificação acadêmica no rodapé. */
+  footer {
+
+    /* Permite quebra de linha quando os controles não cabem na largura disponível. */
+    flex-wrap: wrap;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona footer > span:last-child para aplicar os estilos deste bloco. */
+  footer > span:last-child {
+
+    /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
+    display: none;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}
+
+/* Aplica os ajustes responsivos somente à faixa de largura indicada nesta condição. */
+@media (max-width: 420px) {
+
+  /* Seleciona main para aplicar os estilos deste bloco. */
+  main,
+
+  /* Organiza marca, navegação e indicador de conexão no cabeçalho. */
+  .topbar,
+
+  /* Organiza a marca e a identificação acadêmica no rodapé. */
+  footer {
+
+    /* Reserva espaço interno à esquerda do conteúdo. */
+    padding-left: 18px;
+
+    /* Reserva espaço interno à direita do conteúdo. */
+    padding-right: 18px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Define a tipografia e o alinhamento da marca da loja. */
+  .marca {
+
+    /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+    font-size: 19px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .conexao para aplicar os estilos deste bloco. */
+  .conexao {
+
+    /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+    font-size: 9px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Distribui os cartões de produtos em colunas responsivas. */
+  .produtos {
+
+    /* Define as colunas do layout, adaptando a divisão entre catálogo e sacola. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .titulo-secao .secundario para aplicar os estilos deste bloco. */
+  .titulo-secao .secundario {
+
+    /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+    font-size: 10px;
+
+    /* Define o espaço interno entre o conteúdo e a borda. */
+    padding: 8px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .hero h1 para aplicar os estilos deste bloco. */
+  .hero h1 {
+
+    /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+    font-size: 39px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+  /* Seleciona .faixa para aplicar os estilos deste bloco. */
+  .faixa {
+
+    /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
+    font-size: 9px;
+
+  /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+  }
+
+/* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
+}

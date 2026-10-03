@@ -1,0 +1,20 @@
+# Não envia o ambiente Python para o contexto da imagem Docker.
+.venv
+
+# Não inclui bancos e dados de uma execução local na imagem Docker.
+dados
+
+# Não inclui chaves RSA na imagem; o Compose monta somente as chaves de cada serviço.
+**/chaves
+
+# Não inclui bytecode do Python no contexto Docker.
+**/__pycache__
+
+# Não inclui artefatos temporários da integração na imagem Docker.
+test-results
+
+# Exclui configurações locais e credenciais; apenas .env.example é versionado.
+.env
+
+# Não envia o enunciado acadêmico para a imagem de execução.
+*.pdf
