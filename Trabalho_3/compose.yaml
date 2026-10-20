@@ -24,7 +24,7 @@ services:
     volumes:
       - rabbitmq:/var/lib/rabbitmq
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
       interval: 5s
       timeout: 5s
       retries: 15
@@ -32,7 +32,7 @@ services:
   principal:
     <<: *backend
     command: python -u -m principal
-    ports: ["127.0.0.1:8000:8000"]
+    ports: [ "127.0.0.1:8000:8000" ]
     volumes:
       - ./principal/chaves:/app/principal/chaves:ro
       - principal:/app/dados
@@ -40,7 +40,7 @@ services:
   estoque:
     <<: *backend
     command: python -u -m estoque
-    ports: ["127.0.0.1:8001:8001"]
+    ports: [ "127.0.0.1:8001:8001" ]
     volumes:
       - ./estoque/chaves:/app/estoque/chaves:ro
       - estoque:/app/dados
@@ -48,7 +48,7 @@ services:
   pagamento:
     <<: *backend
     command: python -u -m pagamento
-    ports: ["127.0.0.1:8002:8002"]
+    ports: [ "127.0.0.1:8002:8002" ]
     volumes:
       - ./pagamento/chaves:/app/pagamento/chaves:ro
       - pagamento:/app/dados
@@ -69,6 +69,9 @@ services:
       RESEND_API_KEY: ${RESEND_API_KEY:-}
       EMAIL_FROM: ${EMAIL_FROM:-E-commerce UTFPR <onboarding@resend.dev>}
       INTERVALO_PROMOCOES: ${INTERVALO_PROMOCOES:-30}
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     volumes:
       - ./promocoes/chaves:/app/promocoes/chaves:ro
       - promocoes:/app/dados
@@ -77,13 +80,13 @@ services:
     build: .
     command: python -u -m mock_pagamento
     environment: *ambiente
-    ports: ["127.0.0.1:8003:8003"]
-    volumes: ["mock:/app/dados"]
+    ports: [ "127.0.0.1:8003:8003" ]
+    volumes: [ "mock:/app/dados" ]
     restart: unless-stopped
 
   frontend:
     build: ./frontend
-    ports: ["127.0.0.1:8080:8080"]
+    ports: [ "127.0.0.1:8080:8080" ]
     restart: unless-stopped
 
 volumes:

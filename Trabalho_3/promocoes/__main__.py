@@ -27,6 +27,14 @@ def disparar(banco, email):
 
     campanha = f"{int(time.time() // 60)}:{produto['nome']}:{desconto}"
 
+    # Registra no log a oferta sorteada nesta rodada.
+    log.info(
+        "Rodada de ofertas: produto=%s (categoria %s), desconto=%d%%",
+        produto["nome"],
+        produto["categoria"],
+        desconto,
+    )
+
     for row in banco.ler("SELECT * FROM interesses"):
         if produto["categoria"] not in json.loads(row["categorias"]):
             continue
@@ -49,6 +57,9 @@ def disparar(banco, email):
             except httpx.HTTPError:
                 log.exception("Falha no provedor de e-mail; cadastro preservado")
                 continue
+
+            # Registra no log o sucesso do envio para o cliente.
+            log.info("E-mail promocional enviado com sucesso para %s (%s)", row["email"], assunto)
 
             con.execute(
                 "INSERT INTO envios(id,email,assunto,texto,modo) VALUES (?,?,?,?,?)",
