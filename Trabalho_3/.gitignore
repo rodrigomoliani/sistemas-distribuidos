@@ -1,29 +1,17 @@
-# Exclui o ambiente Python local e seus executáveis.
+# Python
 .venv/
-
-# Exclui bytecode gerado automaticamente pelo Python.
 __pycache__/
-
-# Exclui arquivos Python compilados, otimizados e extensões antigas de bytecode.
 *.py[cod]
 
-# Exclui diretórios de chaves RSA, inclusive as chaves privadas dos serviços.
+# Segurança e ambiente local
 **/chaves/
-
-# Exclui configurações locais e credenciais; apenas .env.example é versionado.
 .env
 
-# Exclui bancos SQLite, caixas de e-mail simuladas e dados locais da execução.
+# Dados e logs
 dados/
-
-# Exclui registros de execução gerados pelos processos.
 *.log
-
-# Exclui bancos temporários, logs e resultados locais da integração.
 test-results/
 
-# Exclui dependências instaladas localmente pelo Node.
+# Frontend e temporários
 node_modules/
-
-# Exclui ferramentas temporárias utilizadas durante o desenvolvimento.
 tmp/

@@ -1,40 +1,13 @@
-// Cópia didática de package.json. O npm lê o arquivo package.json sem comentários.
-
-// Abre o objeto do manifesto npm.
 {
-
-  // Identifica o pacote local do frontend.
   "name": "trabalho3-frontend",
-
-  // Registra a versão inicial deste trabalho.
   "version": "1.0.0",
-
-  // Impede publicação acidental deste projeto como pacote npm.
   "private": true,
-
-  // Permite usar módulos ES com import nos arquivos JavaScript.
   "type": "module",
-
-  // Agrupa os atalhos executados com npm run.
   "scripts": {
-
-    // Inicia o servidor HTTP estático do Node na porta configurada ou 8080.
     "start": "node server.mjs",
-
-    // Verifica a sintaxe de app.js sem executar o frontend.
     "check": "node --check app.js"
-
-  // Fecha o objeto de configurações aberto acima.
   },
-
-  // Documenta a versão mínima do runtime Node necessária.
   "engines": {
-
-    // Requer Node 20 ou superior.
     "node": ">=20"
-
-  // Fecha o objeto de configurações aberto acima.
   }
-
-// Fecha o objeto de configurações aberto acima.
 }

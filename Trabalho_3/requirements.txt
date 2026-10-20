@@ -1,20 +1,7 @@
-# Framework das APIs REST e do stream SSE. A versão fixada torna a instalação previsível.
 fastapi==0.142.2
-
-# Servidor ASGI que executa as aplicações FastAPI. A versão fixada torna a instalação previsível.
 uvicorn==0.54.0
-
-# Cliente HTTP para Estoque, Mock, webhook e API Resend. A versão fixada torna a instalação previsível.
 httpx==0.28.1
-
-# Cliente AMQP do RabbitMQ para publicação e consumo dos eventos. A versão fixada torna a instalação previsível.
 pika==1.3.2
-
-# Implementação RSA e SHA-256 usada nas assinaturas digitais. A versão fixada torna a instalação previsível.
 pycryptodome==3.23.0
-
-# Carrega configurações locais do arquivo .env. A versão fixada torna a instalação previsível.
 python-dotenv==1.2.4
-
-# Valida os endereços usados no cadastro de promoções. A versão fixada torna a instalação previsível.
 email-validator==2.3.0

@@ -1,260 +1,96 @@
-# Define a âncora de configuração reutilizada pelos cinco microsserviços Python.
 x-backend: &backend
-
-  # Escolhe o diretório de contexto usado para construir a imagem deste serviço.
   build: .
-
-  # Define variáveis visíveis somente dentro deste contêiner ou cria a âncora compartilhada.
   environment: &ambiente
-
-    # Configura a conexão AMQP pelo nome do broker na rede do Compose.
     RABBITMQ_URL: amqp://trabalho3:trabalho3@rabbitmq:5672/%2F
-
-    # Aponta para a API interna do Estoque consultada pelo Gateway.
     ESTOQUE_URL: http://estoque:8001
-
-    # Aponta para a API interna do provedor simulado de cobrança.
     MOCK_URL: http://mock-pagamento:8003
-
-    # Gera URLs de checkout que o navegador do usuário consegue abrir.
     MOCK_PUBLIC_URL: http://localhost:8003
-
-    # Define o endpoint interno onde Pagamento receberá a decisão do Mock.
     WEBHOOK_URL: http://pagamento:8002/webhook
-
-    # Compartilha o segredo do webhook; usa o ambiente ou o valor de demonstração.
     WEBHOOK_SECRET: ${WEBHOOK_SECRET:-segredo-local-trabalho3}
-
-    # Escolhe o diretório de dados persistidos dentro do contêiner.
     DATA_DIR: /app/dados
-
-  # Controla a ordem de inicialização das dependências deste serviço.
   depends_on:
-
-    # Define o serviço ou volume rabbitmq, isolado dos demais componentes.
     rabbitmq:
-
-      # Aguarda o healthcheck do RabbitMQ antes de iniciar o backend.
       condition: service_healthy
-
-  # Reinicia o contêiner em falhas, preservando uma parada solicitada pelo usuário.
   restart: unless-stopped
 
-# Inicia a definição dos oito contêineres da aplicação e da infraestrutura.
 services:
-
-  # Define o serviço ou volume rabbitmq, isolado dos demais componentes.
   rabbitmq:
-
-    # Seleciona a imagem oficial e a versão do RabbitMQ usada na demonstração.
     image: rabbitmq:4.3.5
-
-    # Define variáveis visíveis somente dentro deste contêiner ou cria a âncora compartilhada.
     environment:
-
-      # Cria o usuário de demonstração ao inicializar o volume novo do broker.
       RABBITMQ_DEFAULT_USER: trabalho3
-
-      # Configura a senha local de demonstração do broker; não é uma credencial de produção.
       RABBITMQ_DEFAULT_PASS: trabalho3
-
-    # Publica portas somente em 127.0.0.1 para restringir acesso à máquina local.
     ports:
-
-      # Mapeia porta local para a porta do contêiner, sem publicação em interfaces externas.
       - "127.0.0.1:5673:5672"
-
-    # Monta os dados persistidos ou declara os volumes nomeados do projeto.
     volumes:
-
-      # Preserva os dados deste componente no volume nomeado indicado.
       - rabbitmq:/var/lib/rabbitmq
-
-    # Verifica que o RabbitMQ está pronto antes de liberar os serviços dependentes.
     healthcheck:
-
-      # Executa rabbitmq-diagnostics ping dentro do broker para verificar sua saúde.
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
-
-      # Define o intervalo entre verificações de saúde do contêiner.
       interval: 5s
-
-      # Limita o tempo de cada verificação de saúde.
       timeout: 5s
-
-      # Define quantas falhas são aceitas durante a inicialização do broker.
       retries: 15
 
-  # Define o serviço ou volume principal, isolado dos demais componentes.
   principal:
-
-    # Reutiliza a configuração compartilhada pela âncora YAML indicada.
     <<: *backend
-
-    # Executa este módulo Python como processo independente, com log sem buffering.
     command: python -u -m principal
-
-    # Publica portas somente em 127.0.0.1 para restringir acesso à máquina local.
     ports: ["127.0.0.1:8000:8000"]
-
-    # Monta os dados persistidos ou declara os volumes nomeados do projeto.
     volumes:
-
-      # Monta somente as chaves deste serviço, em modo de leitura; privadas não entram na imagem.
       - ./principal/chaves:/app/principal/chaves:ro
-
-      # Preserva os dados deste componente no volume nomeado indicado.
       - principal:/app/dados
 
-  # Define o serviço ou volume estoque, isolado dos demais componentes.
   estoque:
-
-    # Reutiliza a configuração compartilhada pela âncora YAML indicada.
     <<: *backend
-
-    # Executa este módulo Python como processo independente, com log sem buffering.
     command: python -u -m estoque
-
-    # Publica portas somente em 127.0.0.1 para restringir acesso à máquina local.
     ports: ["127.0.0.1:8001:8001"]
-
-    # Monta os dados persistidos ou declara os volumes nomeados do projeto.
     volumes:
-
-      # Monta somente as chaves deste serviço, em modo de leitura; privadas não entram na imagem.
       - ./estoque/chaves:/app/estoque/chaves:ro
-
-      # Preserva os dados deste componente no volume nomeado indicado.
       - estoque:/app/dados
 
-  # Define o serviço ou volume pagamento, isolado dos demais componentes.
   pagamento:
-
-    # Reutiliza a configuração compartilhada pela âncora YAML indicada.
     <<: *backend
-
-    # Executa este módulo Python como processo independente, com log sem buffering.
     command: python -u -m pagamento
-
-    # Publica portas somente em 127.0.0.1 para restringir acesso à máquina local.
     ports: ["127.0.0.1:8002:8002"]
-
-    # Monta os dados persistidos ou declara os volumes nomeados do projeto.
     volumes:
-
-      # Monta somente as chaves deste serviço, em modo de leitura; privadas não entram na imagem.
       - ./pagamento/chaves:/app/pagamento/chaves:ro
-
-      # Preserva os dados deste componente no volume nomeado indicado.
       - pagamento:/app/dados
 
-  # Define o serviço ou volume entrega, isolado dos demais componentes.
   entrega:
-
-    # Reutiliza a configuração compartilhada pela âncora YAML indicada.
     <<: *backend
-
-    # Executa este módulo Python como processo independente, com log sem buffering.
     command: python -u -m entrega
-
-    # Monta os dados persistidos ou declara os volumes nomeados do projeto.
     volumes:
-
-      # Monta somente as chaves deste serviço, em modo de leitura; privadas não entram na imagem.
       - ./entrega/chaves:/app/entrega/chaves:ro
-
-      # Preserva os dados deste componente no volume nomeado indicado.
       - entrega:/app/dados
 
-  # Define o serviço ou volume promocoes, isolado dos demais componentes.
   promocoes:
-
-    # Reutiliza a configuração compartilhada pela âncora YAML indicada.
     <<: *backend
-
-    # Executa este módulo Python como processo independente, com log sem buffering.
     command: python -u -m promocoes
-
-    # Define variáveis visíveis somente dentro deste contêiner ou cria a âncora compartilhada.
     environment:
-
-      # Reutiliza a configuração compartilhada pela âncora YAML indicada.
       <<: *ambiente
-
-      # Seleciona arquivo para demonstração local ou resend para envio real.
       EMAIL_MODO: ${EMAIL_MODO:-arquivo}
-
-      # Obtém a chave do Resend do ambiente, mantendo-a fora do repositório.
       RESEND_API_KEY: ${RESEND_API_KEY:-}
-
-      # Configura o remetente, que deve ser autorizado pelo provedor de e-mail.
       EMAIL_FROM: ${EMAIL_FROM:-E-commerce UTFPR <onboarding@resend.dev>}
-
-      # Define o intervalo em segundos entre campanhas promocionais.
       INTERVALO_PROMOCOES: ${INTERVALO_PROMOCOES:-30}
-
-    # Monta os dados persistidos ou declara os volumes nomeados do projeto.
     volumes:
-
-      # Monta somente as chaves deste serviço, em modo de leitura; privadas não entram na imagem.
       - ./promocoes/chaves:/app/promocoes/chaves:ro
-
-      # Preserva os dados deste componente no volume nomeado indicado.
       - promocoes:/app/dados
 
-  # Define o serviço ou volume mock-pagamento, isolado dos demais componentes.
   mock-pagamento:
-
-    # Escolhe o diretório de contexto usado para construir a imagem deste serviço.
     build: .
-
-    # Executa este módulo Python como processo independente, com log sem buffering.
     command: python -u -m mock_pagamento
-
-    # Define variáveis visíveis somente dentro deste contêiner ou cria a âncora compartilhada.
     environment: *ambiente
-
-    # Publica portas somente em 127.0.0.1 para restringir acesso à máquina local.
     ports: ["127.0.0.1:8003:8003"]
-
-    # Monta os dados persistidos ou declara os volumes nomeados do projeto.
     volumes: ["mock:/app/dados"]
-
-    # Reinicia o contêiner em falhas, preservando uma parada solicitada pelo usuário.
     restart: unless-stopped
 
-  # Define o serviço ou volume frontend, isolado dos demais componentes.
   frontend:
-
-    # Escolhe o diretório de contexto usado para construir a imagem deste serviço.
     build: ./frontend
-
-    # Publica portas somente em 127.0.0.1 para restringir acesso à máquina local.
     ports: ["127.0.0.1:8080:8080"]
-
-    # Reinicia o contêiner em falhas, preservando uma parada solicitada pelo usuário.
     restart: unless-stopped
 
-# Monta os dados persistidos ou declara os volumes nomeados do projeto.
 volumes:
-
-  # Define o serviço ou volume rabbitmq, isolado dos demais componentes.
   rabbitmq:
-
-  # Define o serviço ou volume principal, isolado dos demais componentes.
   principal:
-
-  # Define o serviço ou volume estoque, isolado dos demais componentes.
   estoque:
-
-  # Define o serviço ou volume pagamento, isolado dos demais componentes.
   pagamento:
-
-  # Define o serviço ou volume entrega, isolado dos demais componentes.
   entrega:
-
-  # Define o serviço ou volume promocoes, isolado dos demais componentes.
   promocoes:
-
-  # Define o serviço ou volume mock, isolado dos demais componentes.
   mock:

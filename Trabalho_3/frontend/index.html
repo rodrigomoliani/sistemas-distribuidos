@@ -1,770 +1,170 @@
-<!-- Informa ao navegador que o documento utiliza HTML5. -->
 <!DOCTYPE html>
-
-<!-- Define o idioma português do Brasil para leitura e acessibilidade. -->
 <html lang="pt-BR">
-
- <!-- Agrupa metadados e recursos necessários antes de exibir a página. -->
- <head>
-
-  <!-- Usa UTF-8 para acentos. -->
-  <meta charset="utf-8"/>
-
-  <!-- Ajusta a largura da página à tela do dispositivo e mantém a escala inicial. -->
-  <meta content="width=device-width, initial-scale=1" name="viewport"/>
-
-  <!-- Define o título mostrado na aba do navegador. -->
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Campus Store | E-commerce</title>
-
-  <!-- Carrega o arquivo CSS responsável pelo visual da loja. -->
-  <link href="/style.css" rel="stylesheet"/>
-
-  <!-- Carrega ou define o JavaScript que controla a interface. config.js define a URL pública do Gateway antes de app.js. -->
+  <link rel="stylesheet" href="/style.css" />
   <script src="/config.js"></script>
-
-  <!-- Carrega ou define o JavaScript que controla a interface. defer espera o DOM estar pronto antes de executar app.js. -->
-  <script defer="" src="/app.js"></script>
-
- <!-- Fecha a estrutura head aberta acima. -->
- </head>
-
- <!-- Inicia o conteúdo visível e interativo do documento. -->
- <body>
-
-  <!-- Agrupa a marca, navegação e indicador SSE da loja. -->
+  <script defer src="/app.js"></script>
+</head>
+<body>
   <header class="topbar">
-
-   <!-- Define um link para início, seção do catálogo ou outra área da página. -->
-   <a aria-label="Campus Store, início" class="marca" href="/">
-
-    <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. -->
-    <span class="icone-marca">
-
-     <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-     c.
-
-    <!-- Fecha a estrutura span aberta acima. -->
-    </span>
-
-    <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-    campus
-
-    <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. -->
-    <span>
-
-     <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-     store
-
-    <!-- Fecha a estrutura span aberta acima. -->
-    </span>
-
-   <!-- Fecha a estrutura a aberta acima. -->
-   </a>
-
-   <!-- Oferece links acessíveis para navegar pelas seções da loja. -->
-   <nav aria-label="Seções">
-
-    <!-- Define um link para início, seção do catálogo ou outra área da página. -->
-    <a href="#catalogo">
-
-     <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-     Catálogo
-
-    <!-- Fecha a estrutura a aberta acima. -->
+    <a href="/" class="marca" aria-label="Campus Store, início">
+      <span class="icone-marca">c.</span>
+      campus<span>store</span>
     </a>
-
-    <!-- Define um link para início, seção do catálogo ou outra área da página. -->
-    <a href="#pedidos">
-
-     <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-     Meus pedidos
-
-    <!-- Fecha a estrutura a aberta acima. -->
-    </a>
-
-    <!-- Define um link para início, seção do catálogo ou outra área da página. -->
-    <a href="#promocoes">
-
-     <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-     Promoções
-
-    <!-- Fecha a estrutura a aberta acima. -->
-    </a>
-
-   <!-- Fecha a estrutura nav aberta acima. -->
-   </nav>
-
-   <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. O JavaScript atualiza aqui o estado da conexão SSE. -->
-   <span class="conexao" id="conexao">
-
-    <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-    Conectando…
-
-   <!-- Fecha a estrutura span aberta acima. -->
-   </span>
-
-  <!-- Fecha a estrutura header aberta acima. -->
+    <nav aria-label="Seções">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#pedidos">Meus pedidos</a>
+      <a href="#promocoes">Promoções</a>
+    </nav>
+    <span class="conexao" id="conexao">Conectando…</span>
   </header>
 
-  <!-- Agrupa o conteúdo principal da página. -->
   <main>
+    <section class="hero">
+      <div>
+        <p class="sobretitulo">ESSENCIAIS PARA O SEU DIA</p>
+        <h1>Seu próximo favorito<br />está por aqui.</h1>
+        <p class="intro">
+          Do primeiro rascunho à sua playlist favorita.<br />
+          Pequenas escolhas para acompanhar sua rotina.
+        </p>
+        <a href="#catalogo" class="botao">Explorar produtos <span aria-hidden="true">↗</span></a>
+      </div>
 
-   <!-- Separa uma área temática, acessível por sua âncora quando há ID. -->
-   <section class="hero">
+      <div class="hero-arte" aria-hidden="true">
+        <span class="orbita orbita1"></span>
+        <span class="orbita orbita2"></span>
+        <div class="caderno-hero">
+          <i></i>
+          <span>MAKE<br />ROOM<br />FOR IDEAS.</span>
+          <b>campus / 01</b>
+        </div>
+        <div class="tag-hero">Feito para o seu ritmo.</div>
+      </div>
+    </section>
 
-    <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-    <div>
-
-     <!-- Apresenta instrução, descrição ou feedback em um parágrafo. -->
-     <p class="sobretitulo">
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      ESSENCIAIS PARA O SEU DIA
-
-     <!-- Fecha a estrutura p aberta acima. -->
-     </p>
-
-     <!-- Apresenta o título principal da página. -->
-     <h1>
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      Seu próximo favorito
-
-      <!-- Insere uma quebra explícita de linha no texto. -->
-      <br/>
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      está por aqui.
-
-     <!-- Fecha a estrutura h1 aberta acima. -->
-     </h1>
-
-     <!-- Apresenta instrução, descrição ou feedback em um parágrafo. -->
-     <p class="intro">
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      Do primeiro rascunho à sua playlist favorita.
-
-      <!-- Insere uma quebra explícita de linha no texto. -->
-      <br/>
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      Pequenas escolhas
-
-            <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-            para acompanhar sua rotina.
-
-     <!-- Fecha a estrutura p aberta acima. -->
-     </p>
-
-     <!-- Define um link para início, seção do catálogo ou outra área da página. -->
-     <a class="botao" href="#catalogo">
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      Explorar produtos
-
-      <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. aria-hidden remove a decoração da leitura assistiva. O conteúdo inicia oculto até haver uma mensagem. -->
-      <span aria-hidden="true">
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       ↗
-
-      <!-- Fecha a estrutura span aberta acima. -->
-      </span>
-
-     <!-- Fecha a estrutura a aberta acima. -->
-     </a>
-
-    <!-- Fecha a estrutura div aberta acima. -->
+    <div class="faixa">
+      <span>01 / Escolha seus essenciais</span>
+      <span>02 / Confirme o pagamento</span>
+      <span>03 / Acompanhe cada etapa</span>
     </div>
 
-    <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. aria-hidden remove a decoração da leitura assistiva. O conteúdo inicia oculto até haver uma mensagem. -->
-    <div aria-hidden="true" class="hero-arte">
-
-     <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. -->
-     <span class="orbita orbita1">
-
-     <!-- Fecha a estrutura span aberta acima. -->
-     </span>
-
-     <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. -->
-     <span class="orbita orbita2">
-
-     <!-- Fecha a estrutura span aberta acima. -->
-     </span>
-
-     <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-     <div class="caderno-hero">
-
-      <!-- Cria um detalhe decorativo da ilustração, estilizado pelo CSS. -->
-      <i>
-
-      <!-- Fecha a estrutura i aberta acima. -->
-      </i>
-
-      <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. -->
-      <span>
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       MAKE
-
-       <!-- Insere uma quebra explícita de linha no texto. -->
-       <br/>
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       ROOM
-
-       <!-- Insere uma quebra explícita de linha no texto. -->
-       <br/>
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       FOR IDEAS.
-
-      <!-- Fecha a estrutura span aberta acima. -->
-      </span>
-
-      <!-- Aplica destaque ao detalhe decorativo da ilustração. -->
-      <b>
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       campus / 01
-
-      <!-- Fecha a estrutura b aberta acima. -->
-      </b>
-
-     <!-- Fecha a estrutura div aberta acima. -->
-     </div>
-
-     <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-     <div class="tag-hero">
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      Feito para o seu ritmo.
-
-     <!-- Fecha a estrutura div aberta acima. -->
-     </div>
-
-    <!-- Fecha a estrutura div aberta acima. -->
-    </div>
-
-   <!-- Fecha a estrutura section aberta acima. -->
-   </section>
-
-   <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-   <div class="faixa">
-
-    <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. -->
-    <span>
-
-     <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-     01 / Escolha seus essenciais
-
-    <!-- Fecha a estrutura span aberta acima. -->
-    </span>
-
-    <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. -->
-    <span>
-
-     <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-     02 / Confirme o pagamento
-
-    <!-- Fecha a estrutura span aberta acima. -->
-    </span>
-
-    <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. -->
-    <span>
-
-     <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-     03 / Acompanhe cada etapa
-
-    <!-- Fecha a estrutura span aberta acima. -->
-    </span>
-
-   <!-- Fecha a estrutura div aberta acima. -->
-   </div>
-
-   <!-- Separa uma área temática, acessível por sua âncora quando há ID. -->
-   <section class="secao" id="catalogo">
-
-    <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-    <div class="titulo-secao">
-
-     <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-     <div>
-
-      <!-- Apresenta instrução, descrição ou feedback em um parágrafo. -->
-      <p class="sobretitulo">
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       A COLEÇÃO
-
-      <!-- Fecha a estrutura p aberta acima. -->
-      </p>
-
-      <!-- Apresenta o título de uma seção da página. -->
-      <h2>
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       Bom para a sua rotina.
-
-      <!-- Fecha a estrutura h2 aberta acima. -->
-      </h2>
-
-     <!-- Fecha a estrutura div aberta acima. -->
-     </div>
-
-     <!-- Define uma ação da interface; os atributos identificam o callback e o estado inicial. -->
-     <button class="botao secundario" id="atualizar">
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      Atualizar estoque ↻
-
-     <!-- Fecha a estrutura button aberta acima. -->
-     </button>
-
-    <!-- Fecha a estrutura div aberta acima. -->
-    </div>
-
-    <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-    <div class="loja-layout">
-
-     <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-     <div>
-
-      <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-      <div aria-label="Filtrar categoria" class="filtros">
-
-       <!-- Define uma ação da interface; os atributos identificam o callback e o estado inicial. data-categoria identifica o filtro A/B/C; vazio mostra todos. -->
-       <button class="filtro ativo" data-categoria="">
-
-        <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-        Todos
-
-       <!-- Fecha a estrutura button aberta acima. -->
-       </button>
-
-       <!-- Define uma ação da interface; os atributos identificam o callback e o estado inicial. data-categoria identifica o filtro A/B/C; vazio mostra todos. -->
-       <button class="filtro" data-categoria="A">
-
-        <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-        Papelaria
-
-       <!-- Fecha a estrutura button aberta acima. -->
-       </button>
-
-       <!-- Define uma ação da interface; os atributos identificam o callback e o estado inicial. data-categoria identifica o filtro A/B/C; vazio mostra todos. -->
-       <button class="filtro" data-categoria="B">
-
-        <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-        Vestuário
-
-       <!-- Fecha a estrutura button aberta acima. -->
-       </button>
-
-       <!-- Define uma ação da interface; os atributos identificam o callback e o estado inicial. data-categoria identifica o filtro A/B/C; vazio mostra todos. -->
-       <button class="filtro" data-categoria="C">
-
-        <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-        Eletrônicos
-
-       <!-- Fecha a estrutura button aberta acima. -->
-       </button>
-
-      <!-- Fecha a estrutura div aberta acima. -->
+    <section class="secao" id="catalogo">
+      <div class="titulo-secao">
+        <div>
+          <p class="sobretitulo">A COLEÇÃO</p>
+          <h2>Bom para a sua rotina.</h2>
+        </div>
+        <button id="atualizar" class="botao secundario">Atualizar estoque ↻</button>
       </div>
 
-      <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. Os cartões do catálogo são inseridos aqui após GET /produtos. -->
-      <div class="produtos" id="produtos">
+      <div class="loja-layout">
+        <div>
+          <div class="filtros" aria-label="Filtrar categoria">
+            <button class="filtro ativo" data-categoria="">Todos</button>
+            <button class="filtro" data-categoria="A">Papelaria</button>
+            <button class="filtro" data-categoria="B">Vestuário</button>
+            <button class="filtro" data-categoria="C">Eletrônicos</button>
+          </div>
+          <div class="produtos" id="produtos">
+            <p>Carregando produtos…</p>
+          </div>
+        </div>
 
-       <!-- Apresenta instrução, descrição ou feedback em um parágrafo. -->
-       <p>
+        <aside class="sacola">
+          <div class="sacola-titulo">
+            <h3>Sua sacola</h3>
+            <span id="quantidade-sacola">0</span>
+          </div>
 
-        <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-        Carregando produtos…
+          <div id="itens-sacola">
+            <p class="vazio">Escolha um produto para começar.</p>
+          </div>
 
-       <!-- Fecha a estrutura p aberta acima. -->
-       </p>
+          <div class="total">
+            <span>Total</span>
+            <strong id="total">R$ 0,00</strong>
+          </div>
 
-      <!-- Fecha a estrutura div aberta acima. -->
+          <form id="pedido-form">
+            <label for="nome">Como podemos chamar você?</label>
+            <input
+              id="nome"
+              name="nome"
+              maxlength="80"
+              placeholder="Seu nome"
+              required
+              autocomplete="given-name"
+            />
+            <button id="finalizar" class="botao finalizar" disabled>
+              Finalizar pedido <span>→</span>
+            </button>
+          </form>
+          <p class="nota">Você poderá pagar em uma nova aba após a confirmação do estoque.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="secao pedidos-secao" id="pedidos">
+      <div class="titulo-secao">
+        <div>
+          <p class="sobretitulo">CADA ETAPA, EM TEMPO REAL</p>
+          <h2>Seus pedidos.</h2>
+        </div>
+        <span class="texto-suave">Atualizados automaticamente</span>
       </div>
 
-     <!-- Fecha a estrutura div aberta acima. -->
-     </div>
+      <div id="lista-pedidos">
+        <p class="vazio grande">
+          Seus pedidos aparecerão aqui. Encontre seu próximo favorito no catálogo.
+        </p>
+      </div>
+    </section>
 
-     <!-- Define a área complementar usada para a sacola e a finalização. -->
-     <aside class="sacola">
-
-      <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-      <div class="sacola-titulo">
-
-       <!-- Apresenta o título de um componente, como a sacola. -->
-       <h3>
-
-        <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-        Sua sacola
-
-       <!-- Fecha a estrutura h3 aberta acima. -->
-       </h3>
-
-       <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. Mostra a soma de unidades da sacola. -->
-       <span id="quantidade-sacola">
-
-        <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-        0
-
-       <!-- Fecha a estrutura span aberta acima. -->
-       </span>
-
-      <!-- Fecha a estrutura div aberta acima. -->
+    <section class="promocoes" id="promocoes">
+      <div>
+        <p class="sobretitulo">BOAS DESCOBERTAS NA SUA CAIXA DE ENTRADA</p>
+        <h2>Uma oferta do seu jeito.</h2>
+        <p>Selecione seus interesses e receba novidades por e-mail.</p>
       </div>
 
-      <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. O JavaScript substitui esta área pelos itens selecionados. -->
-      <div id="itens-sacola">
+      <form id="interesse-form">
+        <label for="email">Seu e-mail</label>
+        <input
+          id="email"
+          type="email"
+          placeholder="voce@exemplo.com"
+          required
+          autocomplete="email"
+        />
 
-       <!-- Apresenta instrução, descrição ou feedback em um parágrafo. -->
-       <p class="vazio">
+        <fieldset>
+          <legend>Categorias de interesse</legend>
+          <label><input type="checkbox" name="categoria" value="A" /> Papelaria</label>
+          <label><input type="checkbox" name="categoria" value="B" /> Vestuário</label>
+          <label><input type="checkbox" name="categoria" value="C" /> Eletrônicos</label>
+        </fieldset>
 
-        <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-        Escolha um produto para começar.
-
-       <!-- Fecha a estrutura p aberta acima. -->
-       </p>
-
-      <!-- Fecha a estrutura div aberta acima. -->
-      </div>
-
-      <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-      <div class="total">
-
-       <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. -->
-       <span>
-
-        <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-        Total
-
-       <!-- Fecha a estrutura span aberta acima. -->
-       </span>
-
-       <!-- Destaca uma informação como o total da sacola. Recebe o total em centavos formatado como reais. -->
-       <strong id="total">
-
-        <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-        R$ 0,00
-
-       <!-- Fecha a estrutura strong aberta acima. -->
-       </strong>
-
-      <!-- Fecha a estrutura div aberta acima. -->
-      </div>
-
-      <!-- Agrupa os campos enviados por REST pelo callback JavaScript. -->
-      <form id="pedido-form">
-
-       <!-- Associa o texto descritivo ao campo indicado por for, ou ao controle que contém. -->
-       <label for="nome">
-
-        <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-        Como podemos chamar você?
-
-       <!-- Fecha a estrutura label aberta acima. -->
-       </label>
-
-       <!-- Define um campo do formulário com seu tipo, validação e preenchimento automático. O nome é obrigatório e limitado a oitenta caracteres. -->
-       <input autocomplete="given-name" id="nome" maxlength="80" name="nome" placeholder="Seu nome" required=""/>
-
-       <!-- Define uma ação da interface; os atributos identificam o callback e o estado inicial. Começa desabilitado porque a sacola está vazia. -->
-       <button class="botao finalizar" disabled="" id="finalizar">
-
-        <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-        Finalizar pedido
-
-        <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. -->
-        <span>
-
-         <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-         →
-
-        <!-- Fecha a estrutura span aberta acima. -->
-        </span>
-
-       <!-- Fecha a estrutura button aberta acima. -->
-       </button>
-
-      <!-- Fecha a estrutura form aberta acima. -->
+        <div class="acoes">
+          <button type="submit" class="botao">Salvar interesses →</button>
+          <button type="button" id="cancelar-interesse" class="link-botao">
+            Cancelar inscrição
+          </button>
+        </div>
+        <p id="interesse-mensagem" role="status" aria-live="polite"></p>
       </form>
-
-      <!-- Apresenta instrução, descrição ou feedback em um parágrafo. -->
-      <p class="nota">
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       Você poderá pagar em uma nova aba após a confirmação do estoque.
-
-      <!-- Fecha a estrutura p aberta acima. -->
-      </p>
-
-     <!-- Fecha a estrutura aside aberta acima. -->
-     </aside>
-
-    <!-- Fecha a estrutura div aberta acima. -->
-    </div>
-
-   <!-- Fecha a estrutura section aberta acima. -->
-   </section>
-
-   <!-- Separa uma área temática, acessível por sua âncora quando há ID. -->
-   <section class="secao pedidos-secao" id="pedidos">
-
-    <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-    <div class="titulo-secao">
-
-     <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-     <div>
-
-      <!-- Apresenta instrução, descrição ou feedback em um parágrafo. -->
-      <p class="sobretitulo">
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       CADA ETAPA, EM TEMPO REAL
-
-      <!-- Fecha a estrutura p aberta acima. -->
-      </p>
-
-      <!-- Apresenta o título de uma seção da página. -->
-      <h2>
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       Seus pedidos.
-
-      <!-- Fecha a estrutura h2 aberta acima. -->
-      </h2>
-
-     <!-- Fecha a estrutura div aberta acima. -->
-     </div>
-
-     <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. -->
-     <span class="texto-suave">
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      Atualizados automaticamente
-
-     <!-- Fecha a estrutura span aberta acima. -->
-     </span>
-
-    <!-- Fecha a estrutura div aberta acima. -->
-    </div>
-
-    <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. Recebe pedidos e a linha do tempo atualizada pelo SSE. -->
-    <div id="lista-pedidos">
-
-     <!-- Apresenta instrução, descrição ou feedback em um parágrafo. -->
-     <p class="vazio grande">
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      Seus pedidos aparecerão aqui. Encontre seu próximo favorito no
-
-            <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-            catálogo.
-
-     <!-- Fecha a estrutura p aberta acima. -->
-     </p>
-
-    <!-- Fecha a estrutura div aberta acima. -->
-    </div>
-
-   <!-- Fecha a estrutura section aberta acima. -->
-   </section>
-
-   <!-- Separa uma área temática, acessível por sua âncora quando há ID. -->
-   <section class="promocoes" id="promocoes">
-
-    <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-    <div>
-
-     <!-- Apresenta instrução, descrição ou feedback em um parágrafo. -->
-     <p class="sobretitulo">
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      BOAS DESCOBERTAS NA SUA CAIXA DE ENTRADA
-
-     <!-- Fecha a estrutura p aberta acima. -->
-     </p>
-
-     <!-- Apresenta o título de uma seção da página. -->
-     <h2>
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      Uma oferta do seu jeito.
-
-     <!-- Fecha a estrutura h2 aberta acima. -->
-     </h2>
-
-     <!-- Apresenta instrução, descrição ou feedback em um parágrafo. -->
-     <p>
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      Selecione seus interesses e receba novidades por e-mail.
-
-     <!-- Fecha a estrutura p aberta acima. -->
-     </p>
-
-    <!-- Fecha a estrutura div aberta acima. -->
-    </div>
-
-    <!-- Agrupa os campos enviados por REST pelo callback JavaScript. -->
-    <form id="interesse-form">
-
-     <!-- Associa o texto descritivo ao campo indicado por for, ou ao controle que contém. -->
-     <label for="email">
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      Seu e-mail
-
-     <!-- Fecha a estrutura label aberta acima. -->
-     </label>
-
-     <!-- Define um campo do formulário com seu tipo, validação e preenchimento automático. Exige endereço de e-mail válido no formulário. -->
-     <input autocomplete="email" id="email" placeholder="voce@exemplo.com" required="" type="email"/>
-
-     <!-- Agrupa as categorias relacionadas em um conjunto acessível. -->
-     <fieldset>
-
-      <!-- Descreve o propósito do conjunto de caixas de seleção. -->
-      <legend>
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       Categorias de interesse
-
-      <!-- Fecha a estrutura legend aberta acima. -->
-      </legend>
-
-      <!-- Associa o texto descritivo ao campo indicado por for, ou ao controle que contém. -->
-      <label>
-
-       <!-- Define um campo do formulário com seu tipo, validação e preenchimento automático. value indica a categoria enviada no cadastro de interesses. -->
-       <input name="categoria" type="checkbox" value="A"/>
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       Papelaria
-
-      <!-- Fecha a estrutura label aberta acima. -->
-      </label>
-
-      <!-- Associa o texto descritivo ao campo indicado por for, ou ao controle que contém. -->
-      <label>
-
-       <!-- Define um campo do formulário com seu tipo, validação e preenchimento automático. value indica a categoria enviada no cadastro de interesses. -->
-       <input name="categoria" type="checkbox" value="B"/>
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       Vestuário
-
-      <!-- Fecha a estrutura label aberta acima. -->
-      </label>
-
-      <!-- Associa o texto descritivo ao campo indicado por for, ou ao controle que contém. -->
-      <label>
-
-       <!-- Define um campo do formulário com seu tipo, validação e preenchimento automático. value indica a categoria enviada no cadastro de interesses. -->
-       <input name="categoria" type="checkbox" value="C"/>
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       Eletrônicos
-
-      <!-- Fecha a estrutura label aberta acima. -->
-      </label>
-
-     <!-- Fecha a estrutura fieldset aberta acima. -->
-     </fieldset>
-
-     <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-     <div class="acoes">
-
-      <!-- Define uma ação da interface; os atributos identificam o callback e o estado inicial. -->
-      <button class="botao" type="submit">
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       Salvar interesses →
-
-      <!-- Fecha a estrutura button aberta acima. -->
-      </button>
-
-      <!-- Define uma ação da interface; os atributos identificam o callback e o estado inicial. Solicita DELETE /interesses para remover todas as categorias. -->
-      <button class="link-botao" id="cancelar-interesse" type="button">
-
-       <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-       Cancelar inscrição
-
-      <!-- Fecha a estrutura button aberta acima. -->
-      </button>
-
-     <!-- Fecha a estrutura div aberta acima. -->
-     </div>
-
-     <!-- Apresenta instrução, descrição ou feedback em um parágrafo. Apresenta o resultado do cadastro ou cancelamento. -->
-     <p aria-live="polite" id="interesse-mensagem" role="status">
-
-     <!-- Fecha a estrutura p aberta acima. -->
-     </p>
-
-    <!-- Fecha a estrutura form aberta acima. -->
-    </form>
-
-   <!-- Fecha a estrutura section aberta acima. -->
-   </section>
-
-  <!-- Fecha a estrutura main aberta acima. -->
+    </section>
   </main>
 
-  <!-- Identifica a loja e o trabalho acadêmico no rodapé. -->
   <footer>
-
-   <!-- Define um link para início, seção do catálogo ou outra área da página. -->
-   <a class="marca" href="#">
-
-    <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-    campus
-
-    <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. -->
-    <span>
-
-     <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-     store
-
-    <!-- Fecha a estrutura span aberta acima. -->
-    </span>
-
-   <!-- Fecha a estrutura a aberta acima. -->
-   </a>
-
-   <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. -->
-   <span>
-
-    <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-    UTFPR · Sistemas Distribuídos · Trabalho 3
-
-   <!-- Fecha a estrutura span aberta acima. -->
-   </span>
-
-   <!-- Marca uma pequena parte do conteúdo para estilos ou atualização por JavaScript. -->
-   <span>
-
-    <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-    Uma loja demonstrativa.
-
-   <!-- Fecha a estrutura span aberta acima. -->
-   </span>
-
-  <!-- Fecha a estrutura footer aberta acima. -->
+    <a href="#" class="marca">campus<span>store</span></a>
+    <span>UTFPR · Sistemas Distribuídos · Trabalho 3</span>
+    <span>Uma loja demonstrativa.</span>
   </footer>
 
-  <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. A região role=status com aria-live anuncia feedback ao leitor de tela. O conteúdo inicia oculto até haver uma mensagem. -->
-  <div aria-live="polite" class="toast" hidden="" id="mensagem" role="status">
-
-  <!-- Fecha a estrutura div aberta acima. -->
-  </div>
-
- <!-- Fecha a estrutura body aberta acima. -->
- </body>
-
-<!-- Fecha a estrutura html aberta acima. -->
+  <div id="mensagem" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
 </html>

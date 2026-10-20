@@ -1,483 +1,154 @@
-<!-- Informa ao navegador que o documento utiliza HTML5. -->
 <!DOCTYPE html>
-
-<!-- Define o idioma português do Brasil para leitura e acessibilidade. -->
 <html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout | Pagamento demonstrativo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: #f2f5f4;
+      color: #17322d;
+      font: 16px system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    main {
+      width: min(520px, 100%);
+      padding: 40px;
+      background: white;
+      border: 1px solid #d9e3df;
+      border-radius: 20px;
+      box-shadow: 0 24px 60px #12342d12;
+    }
+    small {
+      color: #536f65;
+      letter-spacing: 0.1em;
+    }
+    h1 {
+      font-size: 30px;
+      letter-spacing: -1px;
+      margin: 15px 0;
+    }
+    p {
+      line-height: 1.6;
+      color: #53635e;
+    }
+    .total {
+      font-size: 42px;
+      color: #17322d;
+      letter-spacing: -2px;
+      margin: 20px 0;
+    }
+    .acoes {
+      display: grid;
+      gap: 12px;
+    }
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 15px;
+      font: 600 15px system-ui, -apple-system, sans-serif;
+      cursor: pointer;
+      background: #17694f;
+      color: white;
+    }
+    button.recusar {
+      background: #f8e9e7;
+      color: #973c32;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+    #mensagem {
+      white-space: pre-wrap;
+    }
+    code {
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <small>PROVEDOR DE PAGAMENTO · SIMULAÇÃO</small>
+    <h1>Finalize seu pagamento.</h1>
+    <p>Nenhum valor será cobrado. Escolha um resultado para continuar o pedido na loja.</p>
+
+    <p class="total" id="total">Carregando…</p>
+    <p>Pedido <code id="pedido"></code></p>
+
+    <div class="acoes">
+      <button data-status="APROVADO">Pagamento Aprovado</button>
+      <button class="recusar" data-status="RECUSADO">Pagamento Recusado</button>
+    </div>
+
+    <p id="mensagem" role="status" aria-live="polite"></p>
+    <p>Após a confirmação, volte à aba da loja para acompanhar a entrega.</p>
+  </main>
+
+  <script>
+    const id = location.pathname.split("/").pop();
+    const botoes = [...document.querySelectorAll("button")];
+    const msg = document.querySelector("#mensagem");
+
+    async function carregar() {
+      const r = await fetch("/cobrancas/" + id);
+      if (!r.ok) throw new Error("Cobrança não encontrada");
 
- <!-- Usa UTF-8 para acentos. -->
- <meta charset="utf-8"/>
+      const c = await r.json();
+      document.querySelector("#total").textContent = new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(c.total_centavos / 100);
 
- <!-- Ajusta a largura da página à tela do dispositivo e mantém a escala inicial. -->
- <meta content="width=device-width, initial-scale=1" name="viewport"/>
+      document.querySelector("#pedido").textContent = c.pedido_id;
 
- <!-- Define o título mostrado na aba do navegador. -->
- <title>Checkout | Pagamento demonstrativo</title>
-
- <!-- Define os estilos locais da página do provedor de pagamento. -->
- <style>
-
-  /* Layout do checkout simulado, independente da loja e sem cobrança real. */
-
-      /* Aplica o ajuste básico de dimensionamento a todos os elementos. */
-      * {
-
-        /* Inclui borda e preenchimento no cálculo da largura e altura do elemento. */
-        box-sizing: border-box;
-
-      /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
-      }
-
-      /* Define o fundo, a tipografia e o espaço da página inteira. */
-      body {
-
-        /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
-        margin: 0;
-
-        /* Define a cor ou transparência do fundo desta área. */
-        background: #f2f5f4;
-
-        /* Define a cor do texto ou dos ícones que herdam a cor atual. */
-        color: #17322d;
-
-        /* Configura em conjunto peso, tamanho e família tipográfica. */
-        font: 16px system-ui;
-
-        /* Garante espaço vertical mínimo, mesmo quando o conteúdo é curto. */
-        min-height: 100vh;
-
-        /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
-        display: grid;
-
-        /* Centraliza ou alinha os itens nos dois eixos do grid. */
-        place-items: center;
-
-        /* Define o espaço interno entre o conteúdo e a borda. */
-        padding: 24px;
-
-      /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
-      }
-
-      /* Seleciona main para aplicar os estilos deste bloco. */
-      main {
-
-        /* Define a largura do componente, podendo respeitar a largura disponível. */
-        width: min(520px, 100%);
-
-        /* Define o espaço interno entre o conteúdo e a borda. */
-        padding: 40px;
-
-        /* Define a cor ou transparência do fundo desta área. */
-        background: white;
-
-        /* Configura espessura, estilo e cor da borda. */
-        border: 1px solid #d9e3df;
-
-        /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
-        border-radius: 20px;
-
-        /* Adiciona profundidade com uma sombra ao redor do componente. */
-        box-shadow: 0 24px 60px #12342d12;
-
-      /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
-      }
-
-      /* Seleciona small para aplicar os estilos deste bloco. */
-      small {
-
-        /* Define a cor do texto ou dos ícones que herdam a cor atual. */
-        color: #536f65;
-
-        /* Ajusta a distância entre caracteres para a hierarquia visual. */
-        letter-spacing: 0.1em;
-
-      /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
-      }
-
-      /* Seleciona h1 para aplicar os estilos deste bloco. */
-      h1 {
-
-        /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
-        font-size: 30px;
-
-        /* Ajusta a distância entre caracteres para a hierarquia visual. */
-        letter-spacing: -1px;
-
-        /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
-        margin: 15px 0;
-
-      /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
-      }
-
-      /* Seleciona p para aplicar os estilos deste bloco. */
-      p {
-
-        /* Define a altura das linhas e o espaçamento vertical do texto. */
-        line-height: 1.6;
-
-        /* Define a cor do texto ou dos ícones que herdam a cor atual. */
-        color: #53635e;
-
-      /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
-      }
-
-      /* Seleciona .total para aplicar os estilos deste bloco. */
-      .total {
-
-        /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
-        font-size: 42px;
-
-        /* Define a cor do texto ou dos ícones que herdam a cor atual. */
-        color: #17322d;
-
-        /* Ajusta a distância entre caracteres para a hierarquia visual. */
-        letter-spacing: -2px;
-
-        /* Define o espaço externo; auto centraliza o elemento quando há largura limitada. */
-        margin: 20px 0;
-
-      /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
-      }
-
-      /* Seleciona .acoes para aplicar os estilos deste bloco. */
-      .acoes {
-
-        /* Escolhe o tipo de layout: grid, flex, bloco ou ocultação. */
-        display: grid;
-
-        /* Define o espaço entre itens do grid ou flex sem margens individuais. */
-        gap: 12px;
-
-      /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
-      }
-
-      /* Seleciona button para aplicar os estilos deste bloco. */
-      button {
-
-        /* Configura espessura, estilo e cor da borda. */
-        border: 0;
-
-        /* Arredonda os cantos; valores altos criam etiquetas ou controles circulares. */
-        border-radius: 9px;
-
-        /* Define o espaço interno entre o conteúdo e a borda. */
-        padding: 15px;
-
-        /* Configura em conjunto peso, tamanho e família tipográfica. */
-        font: 600 15px system-ui;
-
-        /* Escolhe o cursor de interação; pointer indica ação e default indica controle indisponível. */
-        cursor: pointer;
-
-        /* Define a cor ou transparência do fundo desta área. */
-        background: #17694f;
-
-        /* Define a cor do texto ou dos ícones que herdam a cor atual. */
-        color: white;
-
-      /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
-      }
-
-      /* Seleciona button.recusar para aplicar os estilos deste bloco. */
-      button.recusar {
-
-        /* Define a cor ou transparência do fundo desta área. */
-        background: #f8e9e7;
-
-        /* Define a cor do texto ou dos ícones que herdam a cor atual. */
-        color: #973c32;
-
-      /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
-      }
-
-      /* Aplica a aparência dos botões indisponíveis, sem sugerir que podem ser clicados. */
-      button:disabled {
-
-        /* Reduz a opacidade para comunicar visualmente um estado desabilitado. */
-        opacity: 0.5;
-
-        /* Escolhe o cursor de interação; pointer indica ação e default indica controle indisponível. */
-        cursor: default;
-
-      /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
-      }
-
-      /* Seleciona #mensagem para aplicar os estilos deste bloco. */
-      #mensagem {
-
-        /* Preserva quebras de linha úteis nas mensagens do checkout. */
-        white-space: pre-wrap;
-
-      /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
-      }
-
-      /* Seleciona code para aplicar os estilos deste bloco. */
-      code {
-
-        /* Define o tamanho do texto; clamp adapta o título à largura disponível. */
-        font-size: 12px;
-
-        /* Permite quebrar identificadores longos para que não ultrapassem a tela. */
-        overflow-wrap: anywhere;
-
-      /* Fecha o conjunto de propriedades do seletor ou a condição responsiva. */
-      }
-
- /* Encerra os estilos locais do checkout antes de iniciar sua marcação HTML. */
- </style>
-
- <!-- Agrupa o conteúdo principal da página. -->
- <main>
-
-  <!-- Mostra a identificação discreta do provedor simulado. -->
-  <small>
-
-   <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-   PROVEDOR DE PAGAMENTO · SIMULAÇÃO
-
-  <!-- Fecha a estrutura small aberta acima. -->
-  </small>
-
-  <!-- Apresenta o título principal da página. -->
-  <h1>
-
-   <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-   Finalize seu pagamento.
-
-  <!-- Fecha a estrutura h1 aberta acima. -->
-  </h1>
-
-  <!-- Apresenta instrução, descrição ou feedback em um parágrafo. -->
-  <p>
-
-   <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-   Nenhum valor será cobrado. Escolha um resultado para continuar o pedido na
-
-      <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-      loja.
-
-  <!-- Fecha a estrutura p aberta acima. -->
-  </p>
-
-  <!-- Apresenta instrução, descrição ou feedback em um parágrafo. Recebe o total em centavos formatado como reais. -->
-  <p class="total" id="total">
-
-   <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-   Carregando…
-
-  <!-- Fecha a estrutura p aberta acima. -->
-  </p>
-
-  <!-- Apresenta instrução, descrição ou feedback em um parágrafo. -->
-  <p>
-
-   <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-   Pedido
-
-   <!-- Apresenta o identificador completo do pedido em tipografia técnica. Recebe o UUID completo da cobrança no checkout. -->
-   <code id="pedido">
-
-   <!-- Fecha a estrutura code aberta acima. -->
-   </code>
-
-  <!-- Fecha a estrutura p aberta acima. -->
-  </p>
-
-  <!-- Agrupa elementos para aplicar o layout definido nas classes CSS. -->
-  <div class="acoes">
-
-   <!-- Define uma ação da interface; os atributos identificam o callback e o estado inicial. data-status define APROVADO ou RECUSADO para a requisição ao Mock. -->
-   <button data-status="APROVADO">
-
-    <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-    Pagamento Aprovado
-
-   <!-- Fecha a estrutura button aberta acima. -->
-   </button>
-
-   <!-- Define uma ação da interface; os atributos identificam o callback e o estado inicial. data-status define APROVADO ou RECUSADO para a requisição ao Mock. -->
-   <button class="recusar" data-status="RECUSADO">
-
-    <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-    Pagamento Recusado
-
-   <!-- Fecha a estrutura button aberta acima. -->
-   </button>
-
-  <!-- Fecha a estrutura div aberta acima. -->
-  </div>
-
-  <!-- Apresenta instrução, descrição ou feedback em um parágrafo. A região role=status com aria-live anuncia feedback ao leitor de tela. -->
-  <p aria-live="polite" id="mensagem" role="status">
-
-  <!-- Fecha a estrutura p aberta acima. -->
-  </p>
-
-  <!-- Apresenta instrução, descrição ou feedback em um parágrafo. -->
-  <p>
-
-   <!-- Texto apresentado ao usuário dentro do elemento aberto acima. -->
-   Após a confirmação, volte à aba da loja para acompanhar a entrega.
-
-  <!-- Fecha a estrutura p aberta acima. -->
-  </p>
-
- <!-- Fecha a estrutura main aberta acima. -->
- </main>
-
- <!-- Carrega ou define o JavaScript que controla a interface. -->
- <script>
-
-  // Interface do provedor simulado: consulta a cobrança e envia a decisão ao Mock por REST.
-
-      // Extrai o identificador da cobrança do caminho da página de checkout.
-      const id = location.pathname.split("/").pop();
-
-      // Seleciona os dois botões de decisão do checkout.
-      const botoes = [...document.querySelectorAll("button")];
-
-      // Seleciona a área acessível de mensagens do pagamento.
-      const msg = document.querySelector("#mensagem");
-
-      // Consulta o Mock e ajusta valor, identificação, botões e mensagem ao estado da cobrança.
-      async function carregar() {
-
-        // Guarda a resposta HTTP para conferir o status e interpretar seu corpo.
-        const r = await fetch("/cobrancas/" + id);
-
-        // Confere se o servidor respondeu com erro antes de considerar a operação concluída.
-        if (!r.ok) throw new Error("Cobrança não encontrada");
-
-        // Guarda os dados atuais da cobrança consultada no Mock.
-        const c = await r.json();
-
-        // Configura a formatação de moeda em português do Brasil.
-        document.querySelector("#total").textContent = new Intl.NumberFormat(
-
-          // Fornece o valor textual ou a configuração deste campo.
-          "pt-BR",
-
-          // Completa esta expressão com os argumentos ou valores utilizados na etapa carregar.
-          { style: "currency", currency: "BRL" },
-
-        // Completa esta expressão com os argumentos ou valores utilizados na etapa carregar.
-        ).format(c.total_centavos / 100);
-
-        // Atualiza o texto visível sem interpretar conteúdo recebido como HTML.
-        document.querySelector("#pedido").textContent = c.pedido_id;
-
-        // Completa esta expressão com os argumentos ou valores utilizados na etapa carregar.
-        botoes.forEach(
-
-          // Define o callback que transforma ou processa o elemento atual da coleção.
-          (b) =>
-
-            // Completa esta expressão com os argumentos ou valores utilizados na etapa carregar.
-            (b.disabled =
-
-              // Completa esta expressão com os argumentos ou valores utilizados na etapa carregar.
-              !!c.entregue ||
-
-              // Respeita a decisão já persistida; uma tentativa posterior deve repetir o mesmo resultado.
-              (c.estado !== "PENDENTE" && b.dataset.status !== c.estado)),
-
-        // Fecha o bloco, callback, chamada ou coleção iniciado acima.
-        );
-
-        // Informa a decisão confirmada e mantém os botões bloqueados quando o webhook já foi aceito.
-        if (c.entregue)
-
-          // Atualiza o texto visível sem interpretar conteúdo recebido como HTML.
-          msg.textContent = "Resultado confirmado: " + c.estado + ".";
-
-        // Respeita a decisão já persistida; uma tentativa posterior deve repetir o mesmo resultado.
-        else if (c.estado !== "PENDENTE")
-
-          // Atualiza o texto visível sem interpretar conteúdo recebido como HTML.
-          msg.textContent =
-
-            // Fornece o valor textual ou a configuração deste campo.
-            "Decisão registrada. Clique novamente no mesmo resultado para reenviar a confirmação.";
-
-      // Fecha o bloco, callback, chamada ou coleção iniciado acima.
-      }
-
-      // Define o callback que transforma ou processa o elemento atual da coleção.
-      botoes.forEach((b) =>
-
-        // Registra um callback para responder à interação ou à mensagem indicada.
-        b.addEventListener("click", async () => {
-
-          // Define o callback que transforma ou processa o elemento atual da coleção.
-          botoes.forEach((x) => (x.disabled = true));
-
-          // Atualiza o texto visível sem interpretar conteúdo recebido como HTML.
-          msg.textContent = "Confirmando…";
-
-          // Executa a operação protegida pelo tratamento de erros abaixo.
-          try {
-
-            // Guarda a resposta HTTP para conferir o status e interpretar seu corpo.
-            const r = await fetch("/cobrancas/" + id + "/decisao", {
-
-              // Define o método HTTP adequado ao comando REST desta operação.
-              method: "POST",
-
-              // Informa o formato e a codificação do corpo HTTP ao navegador ou servidor.
-              headers: { "Content-Type": "application/json" },
-
-              // Serializa o corpo JSON com os dados necessários ao comando REST.
-              body: JSON.stringify({ status: b.dataset.status }),
-
-            // Fecha o bloco, callback, chamada ou coleção iniciado acima.
-            });
-
-            // Interpreta os dados JSON da resposta HTTP ou da notificação SSE.
-            const d = await r.json();
-
-            // Confere se o servidor respondeu com erro antes de considerar a operação concluída.
-            if (!r.ok) throw new Error(d.detail);
-
-            // Atualiza o texto visível sem interpretar conteúdo recebido como HTML.
-            msg.textContent =
-
-              // Inclui este estado no conjunto usado para decidir as ações ou a aparência do pedido.
-              "Pagamento " + d.status.toLowerCase() + ". Volte à loja.";
-
-          // Trata a falha sem apresentá-la como sucesso ao usuário.
-          } catch (e) {
-
-            // Atualiza o texto visível sem interpretar conteúdo recebido como HTML.
-            msg.textContent = e.message;
-
-          // Restaura os controles mesmo quando a operação termina com erro.
-          } finally {
-
-            // Define o callback que transforma ou processa o elemento atual da coleção.
-            await carregar().catch((e) => (msg.textContent = e.message));
-
-          // Fecha o bloco, callback, chamada ou coleção iniciado acima.
-          }
-
-        // Fecha o bloco, callback, chamada ou coleção iniciado acima.
-        }),
-
-      // Fecha o bloco, callback, chamada ou coleção iniciado acima.
-      );
-
-      // Define o callback que transforma ou processa o elemento atual da coleção.
-      carregar().catch((e) => {
-
-        // Atualiza o texto visível sem interpretar conteúdo recebido como HTML.
-        msg.textContent = e.message;
-
-        // Habilita ou bloqueia o botão conforme o estado persistido da cobrança.
-        botoes.forEach((b) => (b.disabled = true));
-
-      // Fecha o bloco, callback, chamada ou coleção iniciado acima.
+      botoes.forEach((b) => {
+        b.disabled = !!c.entregue || (c.estado !== "PENDENTE" && b.dataset.status !== c.estado);
       });
 
- // Encerra o script do checkout; a próxima linha fecha seu elemento HTML.
- </script>
+      if (c.entregue) {
+        msg.textContent = "Resultado confirmado: " + c.estado + ".";
+      } else if (c.estado !== "PENDENTE") {
+        msg.textContent = "Decisão registrada. Clique novamente no mesmo resultado para reenviar a confirmação.";
+      }
+    }
 
-<!-- Fecha a estrutura html aberta acima. -->
+    botoes.forEach((b) =>
+      b.addEventListener("click", async () => {
+        botoes.forEach((x) => (x.disabled = true));
+        msg.textContent = "Confirmando…";
+
+        try {
+          const r = await fetch("/cobrancas/" + id + "/decisao", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: b.dataset.status }),
+          });
+
+          const d = await r.json();
+          if (!r.ok) throw new Error(d.detail);
+
+          msg.textContent = "Pagamento " + d.status.toLowerCase() + ". Volte à loja.";
+        } catch (e) {
+          msg.textContent = e.message;
+        } finally {
+          await carregar().catch((e) => (msg.textContent = e.message));
+        }
+      })
+    );
+
+    carregar().catch((e) => {
+      msg.textContent = e.message;
+      botoes.forEach((b) => (b.disabled = true));
+    });
+  </script>
+</body>
 </html>
