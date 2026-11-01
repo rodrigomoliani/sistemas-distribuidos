@@ -1,9 +1,7 @@
-"""Servidor gRPC base do nó do cluster."""
+"""Servidor gRPC integrado do nó do cluster (Eleição Raft e Replicação Pull)."""
 
 from concurrent import futures
 import logging
-import signal
-import sys
 import threading
 import time
 from typing import Optional
@@ -20,6 +18,9 @@ from comum.config import (
 )
 from comum.persistencia import PersistenciaNo
 from comum.proto import cluster_pb2, cluster_pb2_grpc
+from no.eleicao import GerenciadorEleicao
+from no.monitor_quorum import MonitorQuorum
+from no.replicacao_pull import ReplicadorPull
 
 logging.basicConfig(
     level=logging.INFO,
@@ -30,33 +31,16 @@ logger = logging.getLogger(f"No{NODE_ID}")
 
 
 class RaftInternalServicer(cluster_pb2_grpc.RaftInternalServiceServicer):
-    """Implementa o serviço gRPC de comunicação interna do Raft."""
+    """Implementa o serviço gRPC de comunicação interna do cluster."""
 
     def __init__(self, servidor: "ServidorNo"):
         self.servidor = servidor
 
     def RequestVote(self, request, context):
-        # Stub para a Parte 1/2: será integrado com a máquina de estados nas Partes 3/4
-        with self.servidor.lock:
-            meta = self.servidor.storage.obter_metadados()
-            return cluster_pb2.VoteResponse(
-                voter_id=NODE_ID,
-                term=meta["current_term"],
-                vote_granted=False,
-            )
+        return self.servidor.eleicao.processar_request_vote(request)
 
     def Fetch(self, request, context):
-        # Stub para a Parte 1/2: será integrado com a replicação Pull nas Partes 3/4
-        with self.servidor.lock:
-            meta = self.servidor.storage.obter_metadados()
-            return cluster_pb2.FetchResponse(
-                leader_id=self.servidor.leader_id or -1,
-                leader_term=meta["current_term"],
-                success=False,
-                conflict_index=0,
-                leader_commit=meta["commit_index"],
-                entries=[],
-            )
+        return self.servidor.replicador_pull.atender_fetch(request)
 
 
 class ClientServicer(cluster_pb2_grpc.ClientServiceServicer):
@@ -69,18 +53,19 @@ class ClientServicer(cluster_pb2_grpc.ClientServiceServicer):
         with self.servidor.lock:
             meta = self.servidor.storage.obter_metadados()
             last_idx, last_term = self.servidor.storage.ultimo_indice_e_termo()
-            leader_addr = CLIENT_PEERS.get(self.servidor.leader_id, "") if self.servidor.leader_id else ""
+            leader_id = self.servidor.eleicao.leader_id
+            leader_addr = CLIENT_PEERS.get(leader_id, "") if leader_id else ""
             banco = self.servidor.storage.obter_todos_comitados()
 
             return cluster_pb2.StatusResponse(
                 node_id=NODE_ID,
-                role=self.servidor.role,
+                role=self.servidor.eleicao.role,
                 current_term=meta["current_term"],
                 voted_for=meta["voted_for"] if meta["voted_for"] is not None else -1,
                 commit_index=meta["commit_index"],
                 last_log_index=last_idx,
                 last_log_term=last_term,
-                leader_id=self.servidor.leader_id or -1,
+                leader_id=leader_id or -1,
                 leader_address=leader_addr,
                 committed_keys_count=len(banco),
             )
@@ -97,7 +82,7 @@ class ClientServicer(cluster_pb2_grpc.ClientServiceServicer):
                     value=valor,
                     commit_index=meta["commit_index"],
                     node_id=NODE_ID,
-                    role=self.servidor.role,
+                    role=self.servidor.eleicao.role,
                     term=meta["current_term"],
                 )
             return cluster_pb2.ReadResponse(
@@ -106,46 +91,73 @@ class ClientServicer(cluster_pb2_grpc.ClientServiceServicer):
                 value="",
                 commit_index=meta["commit_index"],
                 node_id=NODE_ID,
-                role=self.servidor.role,
+                role=self.servidor.eleicao.role,
                 term=meta["current_term"],
             )
 
     def Write(self, request, context):
-        """Gravação com redirecionamento ao líder."""
-        with self.servidor.lock:
-            if self.servidor.role != "LÍDER":
-                leader_addr = CLIENT_PEERS.get(self.servidor.leader_id, "") if self.servidor.leader_id else ""
-                return cluster_pb2.WriteResponse(
-                    success=False,
-                    leader_id=self.servidor.leader_id or -1,
-                    leader_address=leader_addr,
-                    error=f"Nó {NODE_ID} é {self.servidor.role}. Redirecione para o líder.",
-                )
-
-            # Implementação completa com replicação Pull e Quórum será integrada na Parte 4
+        """Gravação com quórum e redirecionamento caso contate seguidor."""
+        # Se não for o líder, informa redirecionamento imediato
+        if self.servidor.eleicao.role != "LÍDER":
+            leader_id = self.servidor.eleicao.leader_id
+            leader_addr = CLIENT_PEERS.get(leader_id, "") if leader_id else ""
             return cluster_pb2.WriteResponse(
                 success=False,
-                leader_id=NODE_ID,
-                error="Cluster ainda em modo de inicialização/eleição.",
+                leader_id=leader_id or -1,
+                leader_address=leader_addr,
+                error=f"Nó {NODE_ID} é {self.servidor.eleicao.role}. Redirecione para o líder.",
             )
+
+        # Se for o líder, submete à replicação e aguarda quórum de commit
+        sucesso, idx, termo, erro = self.servidor.replicador_pull.executar_escrita_cliente(
+            request.key, request.value
+        )
+        return cluster_pb2.WriteResponse(
+            success=sucesso,
+            leader_id=NODE_ID,
+            index=idx,
+            term=termo,
+            error=erro,
+        )
 
 
 class ServidorNo:
-    """Instância do nó do cluster, coordenando storage e servidor gRPC."""
+    """Instância completa do nó do cluster."""
 
     def __init__(self, data_dir=DATA_DIR):
         self.lock = threading.RLock()
         self.storage = PersistenciaNo(data_dir)
-        self.role: str = "SEGUIDOR"
-        self.leader_id: Optional[int] = None
+        self.monitor_quorum = MonitorQuorum(NODE_ID)
+
+        self.eleicao = GerenciadorEleicao(
+            node_id=NODE_ID,
+            storage=self.storage,
+            on_assumir_lideranca=self._on_assumir_lideranca,
+            on_perder_lideranca=self._on_perder_lideranca,
+        )
+
+        self.replicador_pull = ReplicadorPull(
+            node_id=NODE_ID,
+            storage=self.storage,
+            eleicao=self.eleicao,
+            monitor_quorum=self.monitor_quorum,
+        )
+
         self.server: Optional[grpc.Server] = None
         self._parar_evento = threading.Event()
+
+    def _on_assumir_lideranca(self):
+        logger.info(f">>> Nó {NODE_ID} assumiu o papel de LÍDER! <<<")
+        self.monitor_quorum.resetar_para_nova_lideranca(set(PEERS.keys()))
+
+    def _on_perder_lideranca(self):
+        logger.info(f"Nó {NODE_ID} voltou para o papel de SEGUIDOR.")
 
     def banner_status(self) -> str:
         meta = self.storage.obter_metadados()
         last_idx, last_term = self.storage.ultimo_indice_e_termo()
         return (
-            f"[Nó {NODE_ID} | Papel: {self.role} | Termo: {meta['current_term']} | "
+            f"[Nó {NODE_ID} | Papel: {self.eleicao.role} | Termo: {meta['current_term']} | "
             f"CommitIndex: {meta['commit_index']} | LastLog: {last_idx} (T:{last_term})]"
         )
 
@@ -162,11 +174,17 @@ class ServidorNo:
         self.server.add_insecure_port(endereco)
         self.server.start()
         logger.info(f"Servidor gRPC iniciado em {endereco}")
+
+        # Inicia a eleição e o loop de replicação
+        self.eleicao.iniciar()
+        self.replicador_pull.iniciar()
         logger.info(self.banner_status())
 
     def parar(self):
         logger.info(f"Encerrando Nó {NODE_ID}...")
         self._parar_evento.set()
+        self.eleicao.parar()
+        self.replicador_pull.parar()
         if self.server:
             self.server.stop(grace=1)
         logger.info(f"Nó {NODE_ID} encerrado.")
@@ -177,4 +195,3 @@ class ServidorNo:
                 time.sleep(1)
         except KeyboardInterrupt:
             self.parar()
-
