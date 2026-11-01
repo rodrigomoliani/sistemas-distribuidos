@@ -139,3 +139,4 @@ def testar_cenarios():
 
 if __name__ == "__main__":
     testar_cenarios()
+

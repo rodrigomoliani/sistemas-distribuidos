@@ -234,3 +234,4 @@ class GerenciadorEleicao:
 
             self.leader_id = leader_id
             self.resetar_timer_eleicao()
+

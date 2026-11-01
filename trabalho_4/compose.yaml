@@ -59,3 +59,18 @@ services:
     volumes:
       - ./dados/no4:/app/dados
 
+  cliente:
+    <<: *node-base
+    container_name: cliente
+    command: python -c "import time; time.sleep(999999)"
+    environment:
+      <<: *node-env
+      NODE_ID: "0"
+      CLIENT_PEERS: "1=no1:50051,2=no2:50052,3=no3:50053,4=no4:50054"
+    volumes:
+      - ./cliente:/app/cliente:ro
+    depends_on:
+      - no1
+      - no2
+      - no3
+      - no4

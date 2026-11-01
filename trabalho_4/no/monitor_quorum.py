@@ -95,3 +95,4 @@ class MonitorQuorum:
                     novo_commit = n
 
             return novo_commit
+

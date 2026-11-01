@@ -8,8 +8,11 @@ Implementação de um sistema distribuído de replicação de dados utilizando o
 
 ## Visão Geral da Arquitetura
 
-- **Cluster de 4 nós ($N = 4$):** Todos os nós executam a mesma base de código e transitam dinamicamente entre os papéis de **Seguidor**, **Candidato** e **Líder**.
-- **Cliente:** Envia requisições de gravação (com redirecionamento automático caso contate um seguidor/candidato) e consultas de leitura distribuída em qualquer réplica.
+O ambiente é composto por **5 processos distintos**, conforme a especificação oficial:
+- **1 Cliente:** Envia requisições de gravação (com redirecionamento automático caso contate um seguidor/candidato) e consultas de leitura distribuída em qualquer réplica.
+- **4 Nós do Cluster ($N = 4$):** Todos os nós executam a mesma base de código e transitam dinamicamente entre os papéis de **Seguidor**, **Candidato** e **Líder**.
+
+### Regras do Consenso
 - **Quórum ($Q = 3$):** Exige maioria absoluta para aprovação de termos e avanço do índice de *commit*; sem quórum, novas escritas são bloqueadas/rejeitadas.
 - **Modelo Pull & Heartbeat:** As réplicas buscam atualizações periodicamente via `FetchRequest` (a cada 100 ms), que também funciona como sinal de atividade (*heartbeat*). O líder monitora o timeout individual de cada réplica.
 - **Persistência em Disco:** Cada nó armazena localmente em disco três artefatos:
@@ -21,70 +24,75 @@ Implementação de um sistema distribuído de replicação de dados utilizando o
 
 ## Como Executar
 
-### 1. Iniciar o Cluster com Docker Compose
+### 1. Iniciar os 5 Processos com Docker Compose
 
-Suba os 4 nós do cluster orquestrados em rede isolada:
+Suba os 4 nós do cluster e o cliente orquestrados em rede isolada:
 
 ```bash
 docker compose up -d --build
 ```
 
-Os 4 nós iniciarão como seguidores e dispararão eleições automáticas com *election timeout* aleatório (1.5s a 3.0s).
-
-### 2. Verificar o Estado do Cluster
-
-Execute o script de diagnóstico ou use o cliente:
-
+Para verificar que os 5 processos estão ativos:
 ```bash
-python3 -m scripts.verificar_cluster
-```
-
-ou
-
-```bash
-python3 -m cliente.client status
+docker compose ps
 ```
 
 ---
 
 ## Uso do Cliente CLI
 
-O cliente interativo permite realizar operações diretamente contra o cluster:
+O cliente pode ser executado diretamente no host ou dentro do container Docker:
 
+### No Host:
 ```bash
-# Modo Interativo
-python3 -m cliente.client
-
 # Consultar status do cluster
-python3 -m cliente.client status
+python3 -m cliente status
 
 # Gravar dados (redireciona automaticamente para o líder caso contate um seguidor)
-python3 -m cliente.client write chave valor --node 1
+python3 -m cliente write chave valor --node 2
 
 # Ler dados em um nó específico
-python3 -m cliente.client read chave --node 2
+python3 -m cliente read chave --node 3
 
 # Ler dados em todas as réplicas (comprova a consistência distribuída)
-python3 -m cliente.client read chave --todos
+python3 -m cliente read chave --todos
+
+# Modo interativo
+python3 -m cliente
+```
+
+### No Container Docker:
+```bash
+docker compose exec cliente python -m cliente status
+docker compose exec cliente python -m cliente write chave valor --node 3
+docker compose exec cliente python -m cliente read chave --todos
 ```
 
 ---
 
-## Cenários de Testes Obrigatórios
+## Demonstração dos Cenários da Avaliação
 
-Para executar a demonstração automatizada de todos os cenários da professora em sequência:
+### Cenários 1, 2, 3 e 4A
+Executa em sequência os cenários de escrita/leitura, queda do líder com eleição em novo termo, bloqueio por perda de quórum e recuperação de réplica desatualizada:
 
 ```bash
 python3 -m scripts.testar_cenarios
 ```
 
-O script testa e valida:
-1. **Cenário 1 — Escrita Normal e Leitura Distribuída**: Gravação no líder e verificação da leitura consolidada nas 4 réplicas.
-2. **Cenário 2 — Eleição Automática por Queda do Líder**: Queda do líder atual via Docker, detecção de ausência e eleição automática de um novo líder em novo termo.
-3. **Cenário 3 — Bloqueio por Perda de Quórum**: Queda de nós até restar menos de 3 nós ativos ($N < 3$) e comprovação de que o líder recusa/bloqueia novas escritas.
-4. **Cenário 4A — Recuperação de Réplica Desatualizada**: Religamento dos nós e recuperação automática de todas as entradas faltantes via `FetchRequest`.
+### Cenário 4B — Truncamento de Log por Divergência
+Demonstração passo a passo exigida no PDF:
+1. Grava uma entrada no líder antes do quórum (`dado_orfao`).
+2. Derruba o líder (crash) e elege um novo líder em um novo termo.
+3. Grava uma nova entrada válida no novo líder (`dado_valido`).
+4. Religa o antigo líder: ele se torna Seguidor, detecta a divergência via `FetchRequest`, **trunca e deleta** o `dado_orfao` em disco e sincroniza com o novo líder.
 
-### Testes Unitários e de Consenso
+```bash
+python3 -m scripts.demonstrar_cenario_4b
+```
+
+---
+
+## Testes Unitários e de Consenso
 
 Para executar a suíte completa de testes unitários locais:
 

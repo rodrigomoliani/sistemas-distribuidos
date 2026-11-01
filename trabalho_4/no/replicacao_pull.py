@@ -313,3 +313,4 @@ class ReplicadorPull:
             time.sleep(0.05)
 
         return False, target_idx, termo, "Timeout aguardando confirmação do quórum."
+

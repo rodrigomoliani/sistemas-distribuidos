@@ -11,6 +11,7 @@ COPY protos protos
 COPY scripts scripts
 COPY comum comum
 COPY no no
+COPY cliente cliente
 
 # Compilação dos stubs gRPC
 RUN python scripts/compilar_proto.py
