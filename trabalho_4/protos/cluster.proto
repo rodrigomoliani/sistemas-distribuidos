@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package cluster;
+
+// Serviço interno entre os nós do cluster para eleição e replicação
+service RaftInternalService {
+  rpc RequestVote(VoteRequest) returns (VoteResponse);
+  rpc Fetch(FetchRequest) returns (FetchResponse);
+}
+
+// Serviço exposto para clientes realizarem escritas, leituras e inspeção
+service ClientService {
+  rpc Write(WriteRequest) returns (WriteResponse);
+  rpc Read(ReadRequest) returns (ReadResponse);
+  rpc GetStatus(StatusRequest) returns (StatusResponse);
+}
+
+message LogEntry {
+  int64 index = 1;
+  int64 term = 2;
+  string key = 3;
+  string value = 4;
+}
+
+message VoteRequest {
+  int32 candidate_id = 1;
+  int64 term = 2;
+  int64 last_log_index = 3;
+  int64 last_log_term = 4;
+}
+
+message VoteResponse {
+  int32 voter_id = 1;
+  int64 term = 2;
+  bool vote_granted = 3;
+}
+
+message FetchRequest {
+  int32 replica_id = 1;
+  int64 replica_term = 2;
+  int64 prev_log_index = 3;
+  int64 prev_log_term = 4;
+}
+
+message FetchResponse {
+  int32 leader_id = 1;
+  int64 leader_term = 2;
+  bool success = 3;
+  int64 conflict_index = 4;
+  int64 leader_commit = 5;
+  repeated LogEntry entries = 6;
+}
+
+message WriteRequest {
+  string key = 1;
+  string value = 2;
+}
+
+message WriteResponse {
+  bool success = 1;
+  int32 leader_id = 2;
+  string leader_address = 3;
+  int64 index = 4;
+  int64 term = 5;
+  string error = 6;
+}
+
+message ReadRequest {
+  string key = 1;
+}
+
+message ReadResponse {
+  bool found = 1;
+  string key = 2;
+  string value = 3;
+  int64 commit_index = 4;
+  int32 node_id = 5;
+  string role = 6;
+  int64 term = 7;
+}
+
+message StatusRequest {}
+
+message StatusResponse {
+  int32 node_id = 1;
+  string role = 2;
+  int64 current_term = 3;
+  int32 voted_for = 4;
+  int64 commit_index = 5;
+  int64 last_log_index = 6;
+  int64 last_log_term = 7;
+  int32 leader_id = 8;
+  string leader_address = 9;
+  int32 committed_keys_count = 10;
+}
+

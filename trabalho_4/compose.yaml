@@ -1,0 +1,61 @@
+x-node: &node-base
+  build:
+    context: .
+    dockerfile: Dockerfile
+  restart: unless-stopped
+  environment: &node-env
+    NODE_HOST: "0.0.0.0"
+    CLUSTER_SIZE: "4"
+    PEERS: "1=no1:50051,2=no2:50052,3=no3:50053,4=no4:50054"
+    CLIENT_PEERS: "1=127.0.0.1:50051,2=127.0.0.1:50052,3=127.0.0.1:50053,4=127.0.0.1:50054"
+    DATA_DIR: "/app/dados"
+
+services:
+  no1:
+    <<: *node-base
+    container_name: no1
+    environment:
+      <<: *node-env
+      NODE_ID: "1"
+      NODE_PORT: "50051"
+    ports:
+      - "127.0.0.1:50051:50051"
+    volumes:
+      - ./dados/no1:/app/dados
+
+  no2:
+    <<: *node-base
+    container_name: no2
+    environment:
+      <<: *node-env
+      NODE_ID: "2"
+      NODE_PORT: "50052"
+    ports:
+      - "127.0.0.1:50052:50052"
+    volumes:
+      - ./dados/no2:/app/dados
+
+  no3:
+    <<: *node-base
+    container_name: no3
+    environment:
+      <<: *node-env
+      NODE_ID: "3"
+      NODE_PORT: "50053"
+    ports:
+      - "127.0.0.1:50053:50053"
+    volumes:
+      - ./dados/no3:/app/dados
+
+  no4:
+    <<: *node-base
+    container_name: no4
+    environment:
+      <<: *node-env
+      NODE_ID: "4"
+      NODE_PORT: "50054"
+    ports:
+      - "127.0.0.1:50054:50054"
+    volumes:
+      - ./dados/no4:/app/dados
+
