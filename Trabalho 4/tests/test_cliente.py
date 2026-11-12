@@ -5,10 +5,11 @@ from pathlib import Path
 import shutil
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import grpc
 
-from cliente.client import ClienteCluster
+from cliente.client import ClienteCluster, main
 from comum.persistencia import PersistenciaNo
 from comum.proto import cluster_pb2, cluster_pb2_grpc
 from no.servidor import ServidorNo
@@ -67,6 +68,11 @@ class TestClienteCluster(unittest.TestCase):
             self.cliente.status()
         except Exception as e:
             self.fail(f"cliente.status() falhou com exceção: {e}")
+
+    def test_leitura_interativa_com_node(self):
+        with patch("sys.argv", ["cliente"]), patch("builtins.input", side_effect=["read curso --node 3", "exit"]), patch.object(ClienteCluster, "ler") as ler:
+            main()
+        ler.assert_called_once_with("curso", node_id=3)
 
 
 if __name__ == "__main__":

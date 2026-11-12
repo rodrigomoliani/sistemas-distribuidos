@@ -26,11 +26,11 @@ class MonitorQuorum:
             self.last_fetch_time = {p: agora for p in peers_ids if p != self.node_id}
             self.match_index = {p: 0 for p in peers_ids if p != self.node_id}
 
-    def registrar_fetch(self, replica_id: int, match_idx: int) -> None:
+    def registrar_fetch(self, replica_id: int, match_idx: int | None = None) -> None:
         """Registra atividade e índice correspondente reportado no FetchRequest."""
         with self.lock:
             self.last_fetch_time[replica_id] = time.time()
-            if match_idx >= 0:
+            if match_idx is not None:
                 self.match_index[replica_id] = match_idx
 
     def obter_replicas_ativas(self) -> List[int]:

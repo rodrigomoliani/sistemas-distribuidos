@@ -34,8 +34,8 @@ class ReplicadorPull:
         self.eleicao = eleicao
         self.monitor_quorum = monitor_quorum
 
-        self.lock = threading.RLock()
-        self.commit_cond = threading.Condition(self.lock)
+        # Uma única ordem para locks compartilhados: eleição -> persistência -> monitor.
+        self.lock = eleicao.lock
 
         self._ativo = True
         self._thread_fetch = threading.Thread(target=self._loop_fetch, daemon=True)
@@ -45,8 +45,6 @@ class ReplicadorPull:
 
     def parar(self):
         self._ativo = False
-        with self.lock:
-            self.commit_cond.notify_all()
 
     # ==========================================================
     # Loop de Fetch Ativo da Réplica (Seguidor)
@@ -121,13 +119,14 @@ class ReplicadorPull:
         finally:
             canal.close()
 
-        with self.storage.lock, self.eleicao.lock:
+        with self.eleicao.lock, self.storage.lock:
             # Se o líder tem termo estritamente maior, atualiza
             if resp.leader_term > self.storage.current_term:
-                self.eleicao.reconhecer_lider(resp.leader_id, resp.leader_term)
+                self.eleicao.reconhecer_lider(resp.leader_id if resp.leader_id > 0 else None, resp.leader_term)
                 return
 
-            if resp.leader_id > 0 and resp.leader_term == self.storage.current_term:
+            if (self.eleicao.role == "SEGUIDOR" and self.eleicao.leader_id == leader_id
+                    and resp.leader_id == leader_id and resp.leader_term == self.storage.current_term):
                 # Heartbeat bem-sucedido: reseta o temporizador de eleição
                 self.eleicao.reconhecer_lider(resp.leader_id, resp.leader_term)
 
@@ -174,7 +173,7 @@ class ReplicadorPull:
 
     def atender_fetch(self, req: cluster_pb2.FetchRequest) -> cluster_pb2.FetchResponse:
         """Processa requisições de Fetch enviadas pelas réplicas para o Líder."""
-        with self.storage.lock, self.eleicao.lock:
+        with self.eleicao.lock, self.storage.lock:
             # Se a réplica tiver termo maior, o líder se rebaixa imediatamente
             if req.replica_term > self.storage.current_term:
                 logger.info(
@@ -182,6 +181,8 @@ class ReplicadorPull:
                 )
                 self.storage.atualizar_termo(req.replica_term, voted_for=None)
                 self.eleicao.role = "SEGUIDOR"
+                self.eleicao.leader_id = None
+                self.eleicao.resetar_timer_eleicao()
                 self.eleicao.on_perder_lideranca()
                 return cluster_pb2.FetchResponse(
                     leader_id=-1,
@@ -203,14 +204,24 @@ class ReplicadorPull:
                     entries=[],
                 )
 
-            # Registra atividade da réplica no monitor de quórum
-            self.monitor_quorum.registrar_fetch(req.replica_id, req.prev_log_index)
+            if req.replica_term < self.storage.current_term:
+                return cluster_pb2.FetchResponse(
+                    leader_id=self.node_id, leader_term=self.storage.current_term,
+                    success=False, leader_commit=self.storage.commit_index,
+                )
+
+            if req.replica_id not in PEERS or req.replica_id == self.node_id:
+                return cluster_pb2.FetchResponse(leader_id=self.node_id, leader_term=self.storage.current_term)
+
+            # Atividade não implica confirmação de um prefixo de log.
+            self.monitor_quorum.registrar_fetch(req.replica_id)
 
             last_idx, last_term = self.storage.ultimo_indice_e_termo()
 
             # Valida consistência de log até prev_log_index
             # 1. Se prev_log_index for maior que o último log do líder
             if req.prev_log_index > last_idx:
+                self.monitor_quorum.registrar_fetch(req.replica_id, 0)
                 return cluster_pb2.FetchResponse(
                     leader_id=self.node_id,
                     leader_term=self.storage.current_term,
@@ -224,6 +235,7 @@ class ReplicadorPull:
             if req.prev_log_index > 0:
                 entrada_lider = self.storage.obter_entrada(req.prev_log_index)
                 if not entrada_lider or int(entrada_lider["term"]) != req.prev_log_term:
+                    self.monitor_quorum.registrar_fetch(req.replica_id, 0)
                     # Conflito de log! Informa para a réplica recuar
                     return cluster_pb2.FetchResponse(
                         leader_id=self.node_id,
@@ -260,8 +272,6 @@ class ReplicadorPull:
             if novo_commit > self.storage.commit_index:
                 self.storage.avancar_commit(novo_commit)
                 logger.info(f"Líder avançou commit_index para {novo_commit} por quórum.")
-                with self.commit_cond:
-                    self.commit_cond.notify_all()
 
             return cluster_pb2.FetchResponse(
                 leader_id=self.node_id,

@@ -1,6 +1,6 @@
 # Correspondência com o enunciado
 
-Fonte: `Trab2_REST_MOM_SSE_2026_2.pdf`, páginas 1 a 4. A numeração de trabalhos nos PDFs difere da organização do repositório: o Trabalho_2 implementa o e-commerce anterior e o Trabalho_3 o evolui para web.
+Fonte: `Trab2_REST_MOM_SSE_2026_2.pdf`, páginas 1 a 4. A numeração de trabalhos nos PDFs difere da organização do repositório: o Trabalho 2 implementa o e-commerce anterior e o Trabalho 3 o evolui para web.
 
 | Exigência | Implementação | Evidência |
 | --- | --- | --- |

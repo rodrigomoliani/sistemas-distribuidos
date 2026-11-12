@@ -6,7 +6,7 @@ Backend acadêmico para a disciplina de Sistemas Distribuídos da UTFPR. Cinco m
 
 ## Preparação
 
-Requisitos: Python 3.12 e Docker Desktop executando contêineres Linux. No Windows, o Docker pode exigir WSL 2 e uma reinicialização. Execute os comandos abaixo **dentro de `trabalho_2`**, usando PowerShell.
+Requisitos: Python 3.12 e Docker Desktop executando contêineres Linux. No Windows, o Docker pode exigir WSL 2 e uma reinicialização. Execute os comandos abaixo **dentro de `Trabalho 2`**, usando PowerShell.
 
 ```powershell
 py -3.12 -m venv .venv
@@ -52,7 +52,7 @@ docker compose up -d --wait
 .\.venv\Scripts\python.exe -m scripts.preparar_filas --limpar
 ```
 
-Execute cada linha em um terminal diferente, dentro de `trabalho_2`:
+Execute cada linha em um terminal diferente, dentro de `Trabalho 2`:
 
 ```powershell
 .\.venv\Scripts\python.exe -u -m estoque

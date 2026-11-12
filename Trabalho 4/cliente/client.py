@@ -213,8 +213,10 @@ def main():
                 elif cmd == "read" and len(partes) >= 2:
                     if "--todos" in partes or len(partes) == 2:
                         cliente.ler_todas_replicas(partes[1])
+                    elif len(partes) == 4 and partes[2] == "--node" and partes[3].isdigit():
+                        cliente.ler(partes[1], node_id=int(partes[3]))
                     else:
-                        cliente.ler(partes[1], node_id=int(partes[2]))
+                        print("Use: read <chave> [--node N | --todos]")
                 else:
                     print("Comando inválido. Exemplos: 'write x 10', 'read x', 'status'")
             except (KeyboardInterrupt, EOFError):

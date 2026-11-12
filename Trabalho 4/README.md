@@ -90,6 +90,20 @@ Demonstração passo a passo exigida no PDF:
 python3 -m scripts.demonstrar_cenario_4b
 ```
 
+O cenário 4B interrompe o líder após verificar que a entrada foi gravada sem
+commit. Caso a janela de tempo expire antes da gravação, o roteiro informa a
+falha e deve ser executado novamente; ele não anuncia um truncamento não observado.
+
+### Cenário 5 — Isolamento de entradas não comitadas
+
+O teste abaixo usa um líder simulado por um servidor gRPC real e faz a réplica
+buscar a entrada por Fetch. Ele verifica uma leitura gRPC antes e outra depois de
+o líder informar o avanço do commit:
+
+```bash
+python3 -m unittest discover -s tests -p test_regressoes.py -v
+```
+
 ---
 
 ## Testes Unitários e de Consenso

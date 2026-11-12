@@ -6,7 +6,7 @@ O sistema tem catálogo, sacola, pedidos acompanhados em tempo real, checkout ex
 
 ## Preparação
 
-Requisitos: Python 3.12, Node.js 20 ou superior para execução local, e Docker Desktop com contêineres Linux para o Compose. Execute no PowerShell, dentro de `trabalho_3`:
+Requisitos: Python 3.12, Node.js 20 ou superior para execução local, e Docker Desktop com contêineres Linux para o Compose. Execute no PowerShell, dentro de `Trabalho 3`:
 
 ```powershell
 py -3.12 -m venv .venv

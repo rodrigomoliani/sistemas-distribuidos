@@ -62,7 +62,7 @@ class PersistenciaNo:
                     self.voted_for = meta.get("voted_for")
                     self.commit_index = int(meta.get("commit_index", 0))
                 except Exception as err:
-                    print(f"[Storage] Aviso ao carregar metadados: {err}")
+                    raise RuntimeError(f"Não foi possível carregar metadados: {err}") from err
             else:
                 self._persistir_metadados_sem_lock()
 
@@ -71,8 +71,7 @@ class PersistenciaNo:
                 try:
                     self.log = json.loads(self.arq_log.read_text(encoding="utf-8"))
                 except Exception as err:
-                    print(f"[Storage] Aviso ao carregar log: {err}")
-                    self.log = []
+                    raise RuntimeError(f"Não foi possível carregar log: {err}") from err
             else:
                 self._persistir_log_sem_lock()
 
@@ -84,6 +83,19 @@ class PersistenciaNo:
                     print(f"[Storage] Aviso ao carregar banco comitado: {err}")
                     self.banco_comitado = {}
             else:
+                self._persistir_banco_sem_lock()
+
+            # O log e o commit persistido são a fonte de verdade após um crash.
+            # Reconstruir evita que uma atualização parcial dos arquivos exponha
+            # dados acima do commit ou perca uma atualização já confirmada.
+            if self.commit_index > len(self.log):
+                raise ValueError("commit_index persistido ultrapassa o log local")
+            banco_recuperado = {}
+            for entrada in self.log:
+                if int(entrada["index"]) <= self.commit_index:
+                    banco_recuperado[entrada["key"]] = entrada["value"]
+            if banco_recuperado != self.banco_comitado:
+                self.banco_comitado = banco_recuperado
                 self._persistir_banco_sem_lock()
 
     def _persistir_metadados_sem_lock(self) -> None:
@@ -178,6 +190,8 @@ class PersistenciaNo:
         Retorna a quantidade de entradas removidas.
         """
         with self.lock:
+            if index <= self.commit_index:
+                raise ValueError("Não é permitido truncar entradas já comitadas")
             tamanho_original = len(self.log)
             self.log = [e for e in self.log if e["index"] < index]
             removidos = tamanho_original - len(self.log)
@@ -248,8 +262,8 @@ class PersistenciaNo:
                     aplicadas.append(dict(entrada))
 
             self.commit_index = novo_commit_index
-            self._persistir_banco_sem_lock()
             self._persistir_metadados_sem_lock()
+            self._persistir_banco_sem_lock()
             return aplicadas
 
     def ler_comitado(self, key: str) -> Optional[str]:
