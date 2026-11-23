@@ -1,0 +1,7 @@
+.venv
+dados
+**/chaves
+**/__pycache__
+test-results
+.env
+*.pdf

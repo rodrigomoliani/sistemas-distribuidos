@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Campus Store | E-commerce</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/config.js"></script>
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="marca" aria-label="Campus Store, início">
+      <span class="icone-marca">c.</span>
+      campus<span>store</span>
+    </a>
+    <nav aria-label="Seções">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#pedidos">Meus pedidos</a>
+      <a href="#promocoes">Promoções</a>
+    </nav>
+    <span class="conexao" id="conexao">Conectando…</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="sobretitulo">ESSENCIAIS PARA O SEU DIA</p>
+        <h1>Seu próximo favorito<br />está por aqui.</h1>
+        <p class="intro">
+          Do primeiro rascunho à sua playlist favorita.<br />
+          Pequenas escolhas para acompanhar sua rotina.
+        </p>
+        <a href="#catalogo" class="botao">Explorar produtos <span aria-hidden="true">↗</span></a>
+      </div>
+
+      <div class="hero-arte" aria-hidden="true">
+        <span class="orbita orbita1"></span>
+        <span class="orbita orbita2"></span>
+        <div class="caderno-hero">
+          <i></i>
+          <span>MAKE<br />ROOM<br />FOR IDEAS.</span>
+          <b>campus / 01</b>
+        </div>
+        <div class="tag-hero">Feito para o seu ritmo.</div>
+      </div>
+    </section>
+
+    <div class="faixa">
+      <span>01 / Escolha seus essenciais</span>
+      <span>02 / Confirme o pagamento</span>
+      <span>03 / Acompanhe cada etapa</span>
+    </div>
+
+    <section class="secao" id="catalogo">
+      <div class="titulo-secao">
+        <div>
+          <p class="sobretitulo">A COLEÇÃO</p>
+          <h2>Bom para a sua rotina.</h2>
+        </div>
+        <button id="atualizar" class="botao secundario">Atualizar estoque ↻</button>
+      </div>
+
+      <div class="loja-layout">
+        <div>
+          <div class="filtros" aria-label="Filtrar categoria">
+            <button class="filtro ativo" data-categoria="">Todos</button>
+            <button class="filtro" data-categoria="A">Papelaria</button>
+            <button class="filtro" data-categoria="B">Vestuário</button>
+            <button class="filtro" data-categoria="C">Eletrônicos</button>
+          </div>
+          <div class="produtos" id="produtos">
+            <p>Carregando produtos…</p>
+          </div>
+        </div>
+
+        <aside class="sacola">
+          <div class="sacola-titulo">
+            <h3>Sua sacola</h3>
+            <span id="quantidade-sacola">0</span>
+          </div>
+
+          <div id="itens-sacola">
+            <p class="vazio">Escolha um produto para começar.</p>
+          </div>
+
+          <div class="total">
+            <span>Total</span>
+            <strong id="total">R$ 0,00</strong>
+          </div>
+
+          <form id="pedido-form">
+            <label for="nome">Como podemos chamar você?</label>
+            <input
+              id="nome"
+              name="nome"
+              maxlength="80"
+              placeholder="Seu nome"
+              required
+              autocomplete="given-name"
+            />
+            <button id="finalizar" class="botao finalizar" disabled>
+              Finalizar pedido <span>→</span>
+            </button>
+          </form>
+          <p class="nota">Você poderá pagar em uma nova aba após a confirmação do estoque.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="secao pedidos-secao" id="pedidos">
+      <div class="titulo-secao">
+        <div>
+          <p class="sobretitulo">CADA ETAPA, EM TEMPO REAL</p>
+          <h2>Seus pedidos.</h2>
+        </div>
+        <span class="texto-suave">Atualizados automaticamente</span>
+      </div>
+
+      <div id="lista-pedidos">
+        <p class="vazio grande">
+          Seus pedidos aparecerão aqui. Encontre seu próximo favorito no catálogo.
+        </p>
+      </div>
+    </section>
+
+    <section class="promocoes" id="promocoes">
+      <div>
+        <p class="sobretitulo">BOAS DESCOBERTAS NA SUA CAIXA DE ENTRADA</p>
+        <h2>Uma oferta do seu jeito.</h2>
+        <p>Selecione seus interesses e receba novidades por e-mail.</p>
+      </div>
+
+      <form id="interesse-form">
+        <label for="email">Seu e-mail</label>
+        <input
+          id="email"
+          type="email"
+          placeholder="voce@exemplo.com"
+          required
+          autocomplete="email"
+        />
+
+        <fieldset>
+          <legend>Categorias de interesse</legend>
+          <label><input type="checkbox" name="categoria" value="A" /> Papelaria</label>
+          <label><input type="checkbox" name="categoria" value="B" /> Vestuário</label>
+          <label><input type="checkbox" name="categoria" value="C" /> Eletrônicos</label>
+        </fieldset>
+
+        <div class="acoes">
+          <button type="submit" class="botao">Salvar interesses →</button>
+          <button type="button" id="cancelar-interesse" class="link-botao">
+            Cancelar inscrição
+          </button>
+        </div>
+        <p id="interesse-mensagem" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <a href="#" class="marca">campus<span>store</span></a>
+    <span>UTFPR · Sistemas Distribuídos · Trabalho 3</span>
+    <span>Uma loja demonstrativa.</span>
+  </footer>
+
+  <div id="mensagem" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

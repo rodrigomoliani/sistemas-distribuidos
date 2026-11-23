@@ -1,0 +1,99 @@
+x-backend: &backend
+  build: .
+  environment: &ambiente
+    RABBITMQ_URL: amqp://trabalho3:trabalho3@rabbitmq:5672/%2F
+    ESTOQUE_URL: http://estoque:8001
+    MOCK_URL: http://mock-pagamento:8003
+    MOCK_PUBLIC_URL: http://localhost:8003
+    WEBHOOK_URL: http://pagamento:8002/webhook
+    WEBHOOK_SECRET: ${WEBHOOK_SECRET:-segredo-local-trabalho3}
+    DATA_DIR: /app/dados
+  depends_on:
+    rabbitmq:
+      condition: service_healthy
+  restart: unless-stopped
+
+services:
+  rabbitmq:
+    image: rabbitmq:4.3.5
+    environment:
+      RABBITMQ_DEFAULT_USER: trabalho3
+      RABBITMQ_DEFAULT_PASS: trabalho3
+    ports:
+      - "127.0.0.1:5673:5672"
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  principal:
+    <<: *backend
+    command: python -u -m principal
+    ports: [ "127.0.0.1:8000:8000" ]
+    volumes:
+      - ./principal/chaves:/app/principal/chaves:ro
+      - principal:/app/dados
+
+  estoque:
+    <<: *backend
+    command: python -u -m estoque
+    ports: [ "127.0.0.1:8001:8001" ]
+    volumes:
+      - ./estoque/chaves:/app/estoque/chaves:ro
+      - estoque:/app/dados
+
+  pagamento:
+    <<: *backend
+    command: python -u -m pagamento
+    ports: [ "127.0.0.1:8002:8002" ]
+    volumes:
+      - ./pagamento/chaves:/app/pagamento/chaves:ro
+      - pagamento:/app/dados
+
+  entrega:
+    <<: *backend
+    command: python -u -m entrega
+    volumes:
+      - ./entrega/chaves:/app/entrega/chaves:ro
+      - entrega:/app/dados
+
+  promocoes:
+    <<: *backend
+    command: python -u -m promocoes
+    environment:
+      <<: *ambiente
+      EMAIL_MODO: ${EMAIL_MODO:-arquivo}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      EMAIL_FROM: ${EMAIL_FROM:-E-commerce UTFPR <onboarding@resend.dev>}
+      INTERVALO_PROMOCOES: ${INTERVALO_PROMOCOES:-30}
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    volumes:
+      - ./promocoes/chaves:/app/promocoes/chaves:ro
+      - promocoes:/app/dados
+
+  mock-pagamento:
+    build: .
+    command: python -u -m mock_pagamento
+    environment: *ambiente
+    ports: [ "127.0.0.1:8003:8003" ]
+    volumes: [ "mock:/app/dados" ]
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports: [ "127.0.0.1:8080:8080" ]
+    restart: unless-stopped
+
+volumes:
+  rabbitmq:
+  principal:
+  estoque:
+  pagamento:
+  entrega:
+  promocoes:
+  mock:

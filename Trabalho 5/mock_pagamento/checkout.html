@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout | Pagamento demonstrativo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: #f2f5f4;
+      color: #17322d;
+      font: 16px system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    main {
+      width: min(520px, 100%);
+      padding: 40px;
+      background: white;
+      border: 1px solid #d9e3df;
+      border-radius: 20px;
+      box-shadow: 0 24px 60px #12342d12;
+    }
+    small {
+      color: #536f65;
+      letter-spacing: 0.1em;
+    }
+    h1 {
+      font-size: 30px;
+      letter-spacing: -1px;
+      margin: 15px 0;
+    }
+    p {
+      line-height: 1.6;
+      color: #53635e;
+    }
+    .total {
+      font-size: 42px;
+      color: #17322d;
+      letter-spacing: -2px;
+      margin: 20px 0;
+    }
+    .acoes {
+      display: grid;
+      gap: 12px;
+    }
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 15px;
+      font: 600 15px system-ui, -apple-system, sans-serif;
+      cursor: pointer;
+      background: #17694f;
+      color: white;
+    }
+    button.recusar {
+      background: #f8e9e7;
+      color: #973c32;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+    #mensagem {
+      white-space: pre-wrap;
+    }
+    code {
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <small>PROVEDOR DE PAGAMENTO · SIMULAÇÃO</small>
+    <h1>Finalize seu pagamento.</h1>
+    <p>Nenhum valor será cobrado. Escolha um resultado para continuar o pedido na loja.</p>
+
+    <p class="total" id="total">Carregando…</p>
+    <p>Pedido <code id="pedido"></code></p>
+
+    <div class="acoes">
+      <button data-status="APROVADO">Pagamento Aprovado</button>
+      <button class="recusar" data-status="RECUSADO">Pagamento Recusado</button>
+    </div>
+
+    <p id="mensagem" role="status" aria-live="polite"></p>
+    <p>Após a confirmação, volte à aba da loja para acompanhar a entrega.</p>
+  </main>
+
+  <script>
+    const id = location.pathname.split("/").pop();
+    const botoes = [...document.querySelectorAll("button")];
+    const msg = document.querySelector("#mensagem");
+
+    async function carregar() {
+      const r = await fetch("/cobrancas/" + id);
+      if (!r.ok) throw new Error("Cobrança não encontrada");
+
+      const c = await r.json();
+      document.querySelector("#total").textContent = new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(c.total_centavos / 100);
+
+      document.querySelector("#pedido").textContent = c.pedido_id;
+
+      botoes.forEach((b) => {
+        b.disabled = !!c.entregue || (c.estado !== "PENDENTE" && b.dataset.status !== c.estado);
+      });
+
+      if (c.entregue) {
+        msg.textContent = "Resultado confirmado: " + c.estado + ".";
+      } else if (c.estado !== "PENDENTE") {
+        msg.textContent = "Decisão registrada. Clique novamente no mesmo resultado para reenviar a confirmação.";
+      }
+    }
+
+    botoes.forEach((b) =>
+      b.addEventListener("click", async () => {
+        botoes.forEach((x) => (x.disabled = true));
+        msg.textContent = "Confirmando…";
+
+        try {
+          const r = await fetch("/cobrancas/" + id + "/decisao", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: b.dataset.status }),
+          });
+
+          const d = await r.json();
+          if (!r.ok) throw new Error(d.detail);
+
+          msg.textContent = "Pagamento " + d.status.toLowerCase() + ". Volte à loja.";
+        } catch (e) {
+          msg.textContent = e.message;
+        } finally {
+          await carregar().catch((e) => (msg.textContent = e.message));
+        }
+      })
+    );
+
+    carregar().catch((e) => {
+      msg.textContent = e.message;
+      botoes.forEach((b) => (b.disabled = true));
+    });
+  </script>
+</body>
+</html>

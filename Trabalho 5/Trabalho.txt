@@ -1,0 +1,26 @@
+Modifique a comunicação síncrona e em tempo real da Avaliação 3 conforme detalhado abaixo. 
+Frontend - MS Principal / API Gateway (GraphQL):
+Substituir todos os endpoints REST por um único endpoint GraphQL (/graphql).
+Implementar Queries para listar os produtos disponíveis em estoque.
+Implementar Mutations para criar pedidos, registrar interesse em promoções por categoria e cancelar interesse em promoções.
+Notificações de Pedidos e Promoções em Tempo Real (GraphQL Subscriptions):
+Substituir o canal SSE avulso por GraphQL Subscriptions (utilizando SSE ou WebSockets como protocolo de transporte).
+Subscription de Pedidos: notificar o Frontend em tempo real sobre cada mudança de estado do pedido (Estoque Confirmado, Pagamento Aprovado/Recusado, Pedido Enviado).
+Subscription de Promoções: notificar o Frontend em tempo real quando novas promoções forem geradas, filtrando a entrega conforme as categorias de interesse inscritas pelo consumidor.
+MS Principal - MS Estoque (GraphQL):
+Substituir a consulta REST entre esses dois serviços por GraphQL.
+O MS Estoque deve expor uma Query GraphQL para consulta de produtos disponíveis, e o MS Principal deve atuar como cliente GraphQL para consumir esses dados.
+MS Promoções (Remoção da API Externa de E-mail):
+Remover a integração com o serviço externo de e-mail (Resend).
+O MS Promoções deve consumir o evento interesse.promocao do RabbitMQ e publicar no RabbitMQ os eventos de novas promoções geradas (ex.: promocao.gerada), que serão consumidos pelo MS Principal para disparo via GraphQL Subscription.
+Permanecem inalterados o uso do RabbitMQ como broker de mensagens assíncronas e a comunicação REST/Webhook com o Mock de Pagamento.
+Materiais para consulta:
+Slides da aula GraphQL
+
+GraphQL:
+https://graphql.org/learn/introduction/
+https://graphql.org/#how-it-works
+GraphQL subscriptions with WebSockets:
+https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md
+GraphQL subscriptions with server-sent events:
+https://github.com/enisdenjo/graphql-sse/blob/master/PROTOCOL.md

@@ -1,0 +1,17 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# Segurança e ambiente local
+**/chaves/
+.env
+
+# Dados e logs
+dados/
+*.log
+test-results/
+
+# Frontend e temporários
+node_modules/
+tmp/
